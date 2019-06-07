@@ -84,7 +84,7 @@ CONFIG_RTW_WIFI_HAL = y
 CONFIG_VHT_EXTRAS = y
 CONFIG_LED_CONTROL = y
 CONFIG_LED_ENABLE = y
-CONFIG_USB2_EXTERNAL_POWER = n
+CONFIG_USB2_EXTERNAL_POWER = y
 ########################## Debug ###########################
 CONFIG_RTW_DEBUG = n
 # default log level is _DRV_INFO_ = 4,
