@@ -39,7 +39,7 @@ int transmit_power_boost = 2;
 // Transmit Power Override
 // This value completely overrides the driver's calculations and uses only one value for all transmissions.
 // Zero disables it. Default: 0
-int transmit_power_override = 0;
+extern int rtw_tx_pwr_idx_override;
 
 /* Manual Transmit Power Control */
 
@@ -592,8 +592,9 @@ PHY_GetTxPowerIndex_8812A(
 	by_rate_diff = by_rate_diff > limit ? limit : by_rate_diff;
 	power_idx = base_idx + by_rate_diff + tpt_offset + extra_bias + transmit_power_boost;
 
-	if (transmit_power_override != 0)
-		power_idx = transmit_power_override;
+	if (rtw_tx_pwr_idx_override)
+		power_idx = rtw_tx_pwr_idx_override;
+
 	if (power_idx < 1)
 		power_idx = 1;
 

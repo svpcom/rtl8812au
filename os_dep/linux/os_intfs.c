@@ -23,6 +23,8 @@ MODULE_AUTHOR("Realtek Semiconductor Corp.");
 MODULE_VERSION(DRIVERVERSION);
 
 /* module param defaults */
+int rtw_tx_pwr_idx_override = 45;
+module_param(rtw_tx_pwr_idx_override, int, 0644);
 int rtw_chip_version = 0x00;
 int rtw_rfintfs = HWPI;
 int rtw_lbkmode = 0;/* RTL8712_AIR_TRX; */
