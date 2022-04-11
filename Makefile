@@ -208,7 +208,7 @@ endif
 
 ifeq ($(CONFIG_RTL8812A)_$(CONFIG_RTL8821A)_$(CONFIG_RTL8814A), y_y_y)
 
-EXTRA_CFLAGS += -DDRV_NAME=\"rtl88xxau\"
+EXTRA_CFLAGS += -DDRV_NAME=\"rtl88xxau_wfb\"
 ifeq ($(CONFIG_USB_HCI), y)
 USER_MODULE_NAME = 88XXau
 endif
@@ -1523,7 +1523,7 @@ endif
 
 USER_MODULE_NAME ?=
 ifneq ($(USER_MODULE_NAME),)
-MODULE_NAME := $(USER_MODULE_NAME)
+MODULE_NAME := $(USER_MODULE_NAME)_wfb
 endif
 
 ifneq ($(KERNELRELEASE),)
