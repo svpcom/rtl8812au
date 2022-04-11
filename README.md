@@ -54,7 +54,7 @@ with: <br>"modprobe -r 88XXau" && "modprobe 88XXau rtw_vht_enable=2"
 ### Download / Build / Install
 Download
 ```
-$ git clone -b v5.2.20 https://github.com/aircrack-ng/rtl8812au.git
+$ git clone -b v5.2.20 https://github.com/svpcom/rtl8812au.git
 $ cd rtl*
 ```
 Package / Build dependencies (Kali)
