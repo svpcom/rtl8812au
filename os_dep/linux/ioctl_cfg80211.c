@@ -6364,6 +6364,11 @@ exit:
 	return ret;
 }
 
+#if (CFG80211_API_LEVEL >= KERNEL_VERSION(5,8,0))
+static void cfg80211_rtw_update_mgmt_frame_register(struct wiphy *wiphy,
+                                             struct wireless_dev *wdev,
+                                             struct mgmt_frame_regs *upd)
+#else
 static void cfg80211_rtw_mgmt_frame_register(struct wiphy *wiphy,
 #if (CFG80211_API_LEVEL >= KERNEL_VERSION(3, 6, 0))
 	struct wireless_dev *wdev,
@@ -6371,6 +6376,7 @@ static void cfg80211_rtw_mgmt_frame_register(struct wiphy *wiphy,
 	struct net_device *ndev,
 #endif
 	u16 frame_type, bool reg)
+#endif
 {
 #if (CFG80211_API_LEVEL >= KERNEL_VERSION(3, 6, 0))
 	struct net_device *ndev = wdev_to_ndev(wdev);
@@ -6392,17 +6398,6 @@ static void cfg80211_rtw_mgmt_frame_register(struct wiphy *wiphy,
 
 	/* Wait QC Verify */
 	return;
-
-	switch (frame_type) {
-	case IEEE80211_STYPE_PROBE_REQ: /* 0x0040 */
-		SET_CFG80211_REPORT_MGMT(pwdev_priv, IEEE80211_STYPE_PROBE_REQ, reg);
-		break;
-	case IEEE80211_STYPE_ACTION: /* 0x00D0 */
-		SET_CFG80211_REPORT_MGMT(pwdev_priv, IEEE80211_STYPE_ACTION, reg);
-		break;
-	default:
-		break;
-	}
 
 exit:
 	return;
@@ -7825,7 +7820,11 @@ static struct cfg80211_ops rtw_cfg80211_ops = {
 
 #if (CFG80211_API_LEVEL >= KERNEL_VERSION(2, 6, 37)) || defined(COMPAT_KERNEL_RELEASE)
 	.mgmt_tx = cfg80211_rtw_mgmt_tx,
-	.mgmt_frame_register = cfg80211_rtw_mgmt_frame_register,
+#if (CFG80211_API_LEVEL >= KERNEL_VERSION(5,8,0))
+        .update_mgmt_frame_registrations = cfg80211_rtw_update_mgmt_frame_register,
+#else
+        .mgmt_frame_register = cfg80211_rtw_mgmt_frame_register,
+#endif
 #elif (CFG80211_API_LEVEL >= KERNEL_VERSION(2, 6, 34) && CFG80211_API_LEVEL <= KERNEL_VERSION(2, 6, 35))
 	.action = cfg80211_rtw_mgmt_tx,
 #endif

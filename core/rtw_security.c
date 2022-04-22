@@ -2128,7 +2128,7 @@ BIP_exit:
 }
 #endif /* CONFIG_IEEE80211W */
 
-#ifndef PLATFORM_FREEBSD
+#if 0
 /* compress 512-bits */
 static int sha256_compress(struct sha256_state *md, unsigned char *buf)
 {
@@ -2412,7 +2412,7 @@ static void hmac_sha256_vector(u8 *key, size_t key_len, size_t num_elem,
  * This function is used to derive new, cryptographically separate keys from a
  * given key.
  */
-#ifndef PLATFORM_FREEBSD /* Baron */
+#if 0 /* Baron */
 static void sha256_prf(u8 *key, size_t key_len, char *label,
 		       u8 *data, size_t data_len, u8 *buf, size_t buf_len)
 {
