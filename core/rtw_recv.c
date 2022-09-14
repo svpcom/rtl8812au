@@ -2627,7 +2627,7 @@ union recv_frame *recvframe_chk_defrag(PADAPTER padapter, union recv_frame *prec
 	struct sta_priv *pstapriv;
 	_list *phead;
 	union recv_frame *prtnframe = NULL;
-	_queue *pfree_recv_queue, *pdefrag_q;
+	_queue *pfree_recv_queue, *pdefrag_q = NULL;
 
 
 	pstapriv = &padapter->stapriv;
@@ -2646,7 +2646,8 @@ union recv_frame *recvframe_chk_defrag(PADAPTER padapter, union recv_frame *prec
 		u8 type = GetFrameType(pfhdr->rx_data);
 		if (type != WIFI_DATA_TYPE) {
 			psta = rtw_get_bcmc_stainfo(padapter);
-			pdefrag_q = &psta->sta_recvpriv.defrag_q;
+			if (psta)
+			        pdefrag_q = &psta->sta_recvpriv.defrag_q;
 		} else
 			pdefrag_q = NULL;
 	} else
