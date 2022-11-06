@@ -25,6 +25,9 @@ EXTRA_CFLAGS += -Wno-uninitialized
 EXTRA_CFLAGS += -Wno-sign-compare
 #EXTRA_CFLAGS += -Wno-missing-field-initializers
 EXTRA_CFLAGS += -Wno-type-limits
+# Consti10 openhd begin - relax some more warnings such that one can build with debug enabled
+EXTRA_CFLAGS += -Wno-implicit-fallthrough
+# Consti10 openhd end
 
 GCC_VER_49 := $(shell echo `$(CC) -dumpversion | cut -f1-2 -d.` \>= 4.9 | bc )
 ifeq ($(GCC_VER_49),1)
