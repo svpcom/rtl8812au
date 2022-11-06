@@ -10935,6 +10935,8 @@ void rtw_dump_cur_efuse(PADAPTER padapter)
 {
 	u16 mapsize =0;
 	HAL_DATA_TYPE *hal_data = GET_HAL_DATA(padapter);
+	//Const10: needed for debug build
+	int i=0;
 
 	EFUSE_GetEfuseDefinition(padapter, EFUSE_WIFI, TYPE_EFUSE_MAP_LEN , (void *)&mapsize, _FALSE);
 
