@@ -997,8 +997,8 @@ uint loadparam(_adapter *padapter)
 
 #ifdef CONFIG_TXPWR_LIMIT
 	registry_par->RegEnableTxPowerLimit = (u8)rtw_tx_pwr_lmt_enable;
+	printk("OpenHD:rtw_tx_pwr_lmt_enable:%d\n",(int)rtw_tx_pwr_lmt_enable);
 #endif
-  	printk("OpenHD:rtw_tx_pwr_lmt_enable:%d\n",(int)rtw_tx_pwr_lmt_enable);
 	registry_par->RegEnableTxPowerByRate = (u8)rtw_tx_pwr_by_rate;
 	//OpenHD
     printk("OpenHD:rtw_tx_pwr_by_rate:%d\n",(int)rtw_tx_pwr_by_rate);
