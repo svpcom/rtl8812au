@@ -1002,7 +1002,7 @@ uint loadparam(_adapter *padapter)
 #endif
 	// TODO fix me
 	RTW_INFO("OpenHD:hard-coded params !!");
-	rtw_tx_pwr_idx_override=58;
+	//rtw_tx_pwr_idx_override=58;
   	rtw_tx_pwr_by_rate=0;
 
 	registry_par->RegEnableTxPowerByRate = (u8)rtw_tx_pwr_by_rate;
