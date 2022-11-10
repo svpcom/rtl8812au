@@ -16,6 +16,7 @@
 
 #include <drv_types.h>
 #include <hal_data.h>
+#include <drv_conf.h>
 
 #define PG_TXPWR_MSB_DIFF_S4BIT(_pg_v) (((_pg_v) & 0xf0) >> 4)
 #define PG_TXPWR_LSB_DIFF_S4BIT(_pg_v) ((_pg_v) & 0x0f)
@@ -48,13 +49,14 @@ const char *const _pg_txpwr_src_str[] = {
 
 #define pg_txpwr_src_str(src) (((src) >= PG_TXPWR_SRC_NUM) ? _pg_txpwr_src_str[PG_TXPWR_SRC_NUM] : _pg_txpwr_src_str[(src)])
 
-#ifndef DBG_PG_TXPWR_READ
+//Consti10: Duplicated, confusing. Now we pull in autoconf.h and read the values from there
+/*#ifndef DBG_PG_TXPWR_READ
 #define DBG_PG_TXPWR_READ 0
 #endif
 
 #ifndef DBG_TX_POWER_IDX
 #define DBG_TX_POWER_IDX 0
-#endif
+#endif*/
 
 #if DBG_PG_TXPWR_READ
 static void dump_pg_txpwr_info_2g(void *sel, TxPowerInfo24G *txpwr_info, u8 rfpath_num, u8 max_tx_cnt)
