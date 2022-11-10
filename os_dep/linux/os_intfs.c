@@ -1000,6 +1000,11 @@ uint loadparam(_adapter *padapter)
 	//Consti10: Define is off at build time
 	RTW_INFO("OpenHD:rtw_tx_pwr_lmt_enable:%d\n",(int)rtw_tx_pwr_lmt_enable);
 #endif
+	// TODO fix me
+	RTW_INFO("OpenHD:hard-coded params !!");
+	rtw_tx_pwr_idx_override=58;
+  	rtw_tx_pwr_by_rate=0;
+
 	registry_par->RegEnableTxPowerByRate = (u8)rtw_tx_pwr_by_rate;
     RTW_INFO("OpenHD:rtw_tx_pwr_by_rate:%d\n",(int)rtw_tx_pwr_by_rate);
 
