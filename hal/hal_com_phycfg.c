@@ -49,11 +49,11 @@ const char *const _pg_txpwr_src_str[] = {
 #define pg_txpwr_src_str(src) (((src) >= PG_TXPWR_SRC_NUM) ? _pg_txpwr_src_str[PG_TXPWR_SRC_NUM] : _pg_txpwr_src_str[(src)])
 
 #ifndef DBG_PG_TXPWR_READ
-#define DBG_PG_TXPWR_READ 1
+#define DBG_PG_TXPWR_READ 0
 #endif
 
 #ifndef DBG_TX_POWER_IDX
-#define DBG_TX_POWER_IDX 1
+#define DBG_TX_POWER_IDX 0
 #endif
 
 #if DBG_PG_TXPWR_READ
