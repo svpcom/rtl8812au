@@ -48,7 +48,7 @@ const char *const _pg_txpwr_src_str[] = {
 
 #define pg_txpwr_src_str(src) (((src) >= PG_TXPWR_SRC_NUM) ? _pg_txpwr_src_str[PG_TXPWR_SRC_NUM] : _pg_txpwr_src_str[(src)])
 
-//Consti10: Duplicated, confusing. Just use the defines here
+//Consti10: Was duplicated in autoconf too, confusing. Just use the defines here
 #ifndef DBG_PG_TXPWR_READ
 #define DBG_PG_TXPWR_READ 0
 #endif
