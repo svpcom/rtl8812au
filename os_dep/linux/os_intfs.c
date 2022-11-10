@@ -997,6 +997,7 @@ uint loadparam(_adapter *padapter)
 
 #ifdef CONFIG_TXPWR_LIMIT
 	registry_par->RegEnableTxPowerLimit = (u8)rtw_tx_pwr_lmt_enable;
+	//Consti10: Define is off at build time
 	printk("OpenHD:rtw_tx_pwr_lmt_enable:%d\n",(int)rtw_tx_pwr_lmt_enable);
 #endif
 	registry_par->RegEnableTxPowerByRate = (u8)rtw_tx_pwr_by_rate;
