@@ -3653,14 +3653,14 @@ int value;
 	value = dbm;
 #endif
 
-	pr_emerg("OpenHD:cfg80211_rtw_set_txpower with %d",(int)value);
+	RTW_INFO("OpenHD:cfg80211_rtw_set_txpower with %d",(int)value);
 if(value < 0)
 	value = 0;
 if(value > 40)
 	value = 40;
 
 if(type == NL80211_TX_POWER_FIXED) {
-    pr_emerg("OpenHD:cfg80211_rtw_set_txpower NL80211_TX_POWER_FIXED");
+    RTW_INFO("OpenHD:cfg80211_rtw_set_txpower NL80211_TX_POWER_FIXED");
 	pHalData->CurrentTxPwrIdx = value;
 	rtw_hal_set_tx_power_level(padapter, pHalData->current_channel);
 } else
