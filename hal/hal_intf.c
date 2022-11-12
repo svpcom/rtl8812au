@@ -679,8 +679,11 @@ void	rtw_hal_set_chnl_bw(_adapter *padapter, u8 channel, enum channel_width Band
 
 void	rtw_hal_set_tx_power_level(_adapter *padapter, u8 channel)
 {
-	if (padapter->hal_func.set_tx_power_level_handler)
-		padapter->hal_func.set_tx_power_level_handler(padapter, channel);
+	if (padapter->hal_func.set_tx_power_level_handler) {
+	  RTW_INFO("OpenHD:calling set_tx_power_level_handler");
+	  // NOTE: Should point to PHY_SetTxPowerLevel8812() on rtl8812au
+	  padapter->hal_func.set_tx_power_level_handler(padapter, channel);
+	}
 }
 
 void	rtw_hal_get_tx_power_level(_adapter *padapter, s32 *powerlevel)
