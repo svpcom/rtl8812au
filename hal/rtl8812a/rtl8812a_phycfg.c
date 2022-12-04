@@ -616,6 +616,11 @@ PHY_SetTxPowerIndex_8812A(
 {
 	HAL_DATA_TYPE		*pHalData	= GET_HAL_DATA(Adapter);
 
+	//OpenHD Consti10: If you start at set_tx_power_level_handler and then go through all the
+	// different functions that do cryptic things in the end you land here
+  	RTW_INFO("OpenHD:PHY_SetTxPowerIndex_8812A with PowerIndex:%d Override:%d Rate:",PowerIndex,Adapter->registrypriv.RegTxPowerIndexOverride,(int)Rate);
+
+
 	if (Adapter->registrypriv.RegTxPowerIndexOverride)
 		PowerIndex = (u32)Adapter->registrypriv.RegTxPowerIndexOverride;
 
