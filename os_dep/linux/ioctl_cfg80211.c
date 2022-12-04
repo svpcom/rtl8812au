@@ -3669,7 +3669,7 @@ if(type == NL80211_TX_POWER_FIXED) {
 	// need any kernel patches to set the card to an arbitratry high power value, since they are well below the legal limit of
 	// every country. Note, however, that the card is now not doing what linux tells it - but honestly, someone decided
 	// to just map dBm values to some power index at some point anyways.
-	if(mBm>=0 && mBm<=63){
+	if(mbm>=0 && mbm<=63){
 	  padapter->registrypriv.RegTxPowerIndexOverride = mBm;
 	  RTW_WARN("OpenHD:interpreting %d mBm as power index",(int)mbm);
 	}
