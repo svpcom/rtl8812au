@@ -3677,6 +3677,7 @@ if(type == NL80211_TX_POWER_FIXED) {
 	  padapter->registrypriv.RegTxPowerIndexOverride = 63;
 	  RTW_INFO("OpenHD:interpreting %d mBm as max power",(int)mbm);
 	}
+	RTW_INFO("OpenHD:Tx power index is %d",padapter->registrypriv.RegTxPowerIndexOverride);
 
 	pHalData->CurrentTxPwrIdx = value;
 	rtw_hal_set_tx_power_level(padapter, pHalData->current_channel);
