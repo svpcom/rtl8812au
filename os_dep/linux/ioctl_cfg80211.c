@@ -3653,7 +3653,7 @@ int value;
 	value = dbm;
 #endif
 
-	RTW_INFO("OpenHD:cfg80211_rtw_set_txpower with % milli dBm %d dBm",mbm,(int)value);
+	RTW_INFO("OpenHD:cfg80211_rtw_set_txpower with %d milli dBm %d dBm",(int)mbm,(int)value);
 if(value < 0)
 	value = 0;
 if(value > 40)
