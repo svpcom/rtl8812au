@@ -618,7 +618,7 @@ PHY_SetTxPowerIndex_8812A(
 
 	//OpenHD Consti10: If you start at set_tx_power_level_handler and then go through all the
 	// different functions that do cryptic things in the end you land here
-  	RTW_INFO("OpenHD:PHY_SetTxPowerIndex_8812A with PowerIndex:%d Override:%d Rate:",PowerIndex,Adapter->registrypriv.RegTxPowerIndexOverride,(int)Rate);
+  	RTW_INFO("OpenHD:PHY_SetTxPowerIndex_8812A with PowerIndex:%d Override:%d Rate:%d ",PowerIndex,Adapter->registrypriv.RegTxPowerIndexOverride,(int)Rate);
 
 
 	if (Adapter->registrypriv.RegTxPowerIndexOverride)
