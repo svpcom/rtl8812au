@@ -17,8 +17,8 @@
 [![wifite2](https://img.shields.io/badge/wifite2-supported-blue.svg)](https://github.com/derv82/wifite2)
 
 ## OpenHD dynamic power levels:
-To support changing the power index dynamically at run time, we map really low dBm values to low,medium,high and max power
-They override the tx power index at run time.
+To support changing the power index dynamically at run time we repurpose really small mBm values to override the power index at run time.
+This means if you set stupidly low mBm values (e.g. using iw dev), you now get full control over the power index at run time.
 See https://github.com/OpenHD/rtl8812au/blob/v5.2.20/os_dep/linux/ioctl_cfg80211.c#L3667
 
 ### DKMS

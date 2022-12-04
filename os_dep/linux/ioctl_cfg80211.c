@@ -3662,20 +3662,16 @@ if(value > 40)
 if(type == NL80211_TX_POWER_FIXED) {
     RTW_INFO("OpenHD:cfg80211_rtw_set_txpower NL80211_TX_POWER_FIXED");
 	// OpenHD dynamic tx power: We hack the driver here by repurposing really small dBm values
-	// as indices for a power level.
-	// See ... for more info
-	if(mbm==100){
-	  padapter->registrypriv.RegTxPowerIndexOverride = 19;
-	  RTW_INFO("OpenHD:interpreting %d mBm as low power",(int)mbm);
-	}else if(mbm==200){
-	  padapter->registrypriv.RegTxPowerIndexOverride = 35;
-	  RTW_INFO("OpenHD:interpreting %d mBm as medium power",(int)mbm);
-	}else if(mbm==300){
-	  padapter->registrypriv.RegTxPowerIndexOverride = 58;
-	  RTW_INFO("OpenHD:interpreting %d mBm as high power",(int)mbm);
-	}else if(mbm==400){
-	  padapter->registrypriv.RegTxPowerIndexOverride = 63;
-	  RTW_INFO("OpenHD:interpreting %d mBm as max power",(int)mbm);
+	// as power index. This is a bit dangerous - since 63mBm now suddenly becomes max power.
+	// But since 25mW is already ~14dBm (and therefore 140 mBm if you go with the 100 factor)
+	// i think it is safe to assume that only OpenHD (which knows about the driver) ever calls
+	// the "set tx power fixed" with those ultra low values. The nice thing then is that we don't even
+	// need any kernel patches to set the card to an arbitratry high power value, since they are well below the legal limit of
+	// every country. Note, however, that the card is now not doing what linux tells it - but honestly, someone decided
+	// to just map dBm values to some power index at some point anyways.
+	if(mBm>=0 && mBm<=63){
+	  padapter->registrypriv.RegTxPowerIndexOverride = mBm;
+	  RTW_WARN("OpenHD:interpreting %d mBm as power index",(int)mbm);
 	}
 	RTW_INFO("OpenHD:Tx power index is %d",padapter->registrypriv.RegTxPowerIndexOverride);
 
@@ -3724,10 +3720,12 @@ static int cfg80211_rtw_get_txpower(struct wiphy *wiphy,
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(padapter);
 
 	RTW_INFO("%s\n", __func__);
-
-	// *dbm = (12);
-	*dbm = pHalData->CurrentTxPwrIdx;
-
+	if(padapter->registrypriv.RegTxPowerIndexOverride){
+	  	*dbm = padapter->registrypriv.RegTxPowerIndexOverride;
+	}else{
+	  	// *dbm = (12);
+		*dbm = pHalData->CurrentTxPwrIdx;
+	}
 	return 0;
 }
 
