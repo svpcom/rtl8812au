@@ -3653,7 +3653,7 @@ int value;
 	value = dbm;
 #endif
 
-	RTW_INFO("OpenHD:cfg80211_rtw_set_txpower with %d dBm",(int)value);
+	RTW_INFO("OpenHD:cfg80211_rtw_set_txpower with % milli dBm %d dBm",mbm,(int)value);
 if(value < 0)
 	value = 0;
 if(value > 40)
@@ -3663,22 +3663,19 @@ if(type == NL80211_TX_POWER_FIXED) {
     RTW_INFO("OpenHD:cfg80211_rtw_set_txpower NL80211_TX_POWER_FIXED");
 	// OpenHD dynamic tx power: We hack the driver here by repurposing really small dBm values
 	// as indices for a power level.
-	// 1dBm= low power (<=25mW)
-	// 2dBm= medium power
-	// 3dBm= high power
-	// 4dBm= max power
-	if(value==1){
+	// See ... for more info
+	if(mbm==100){
 	  padapter->registrypriv.RegTxPowerIndexOverride = 19;
-	  RTW_INFO("OpenHD:interpreting 1dBm as low power");
-	}else if(value==2){
+	  RTW_INFO("OpenHD:interpreting %d milli dBm as low power",(int)mbm);
+	}else if(mbm==200){
 	  padapter->registrypriv.RegTxPowerIndexOverride = 35;
-	  RTW_INFO("OpenHD:interpreting 2dBm as medium power");
-	}else if(value==3){
+	  RTW_INFO("OpenHD:interpreting %d milli dBm as medium power",(int)mbm);
+	}else if(mbm==300){
 	  padapter->registrypriv.RegTxPowerIndexOverride = 58;
-	  RTW_INFO("OpenHD:interpreting 3dBm as high power");
-	}else if(value==4){
+	  RTW_INFO("OpenHD:interpreting %d milli dBm as high power",(int)mbm);
+	}else if(mbm==400){
 	  padapter->registrypriv.RegTxPowerIndexOverride = 63;
-	  RTW_INFO("OpenHD:interpreting 4dBm as max power");
+	  RTW_INFO("OpenHD:interpreting %d milli dBm as max power",(int)mbm);
 	}
 
 	pHalData->CurrentTxPwrIdx = value;
