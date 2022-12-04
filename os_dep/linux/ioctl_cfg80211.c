@@ -3671,7 +3671,7 @@ if(type == NL80211_TX_POWER_FIXED) {
 	// to just map dBm values to some power index at some point anyways.
 	if(mbm>=0 && mbm<=63){
 	  padapter->registrypriv.RegTxPowerIndexOverride = mBm;
-	  RTW_WARN("OpenHD:interpreting %d mBm as power index",(int)mbm);
+	  RTW_WARN("OpenHD:interpreting %d mBm as tx power index override",(int)mbm);
 	}
 	RTW_INFO("OpenHD:Tx power index is %d",padapter->registrypriv.RegTxPowerIndexOverride);
 

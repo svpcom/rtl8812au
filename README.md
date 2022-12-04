@@ -19,6 +19,9 @@
 ## OpenHD dynamic power levels:
 To support changing the power index dynamically at run time we repurpose really small mBm values to override the power index at run time.
 This means if you set stupidly low mBm values (e.g. using iw dev), you now get full control over the power index at run time.
+WARN: This means the card can send with max power (power index 63) if you set NL80211_ATTR_WIPHY_TX_POWER_LEVEL=63(mbm). 
+However, this tx power stuff is completely busted in this driver already anyways, someone already changed the driver to cast dBm values
+directly to some power index. Tested, works.
 See https://github.com/OpenHD/rtl8812au/blob/v5.2.20/os_dep/linux/ioctl_cfg80211.c#L3667
 
 ### DKMS
