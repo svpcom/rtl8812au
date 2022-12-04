@@ -19,7 +19,7 @@
 ## OpenHD dynamic power levels:
 To support changing the power index dynamically at run time, we map really low dBm values to low,medium,high and max power
 They override the tx power index at run time.
-See ...
+See https://github.com/OpenHD/rtl8812au/blob/v5.2.20/os_dep/linux/ioctl_cfg80211.c#L3667
 
 ### DKMS
 This driver can be installed using [DKMS]. This is a system which will automatically recompile and install a kernel module when a new kernel gets installed or updated. To make use of DKMS, install the `dkms` package, which on Debian (based) systems is done like this:
