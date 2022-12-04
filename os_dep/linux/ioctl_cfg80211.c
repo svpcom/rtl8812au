@@ -3673,7 +3673,7 @@ if(type == NL80211_TX_POWER_FIXED) {
 	  padapter->registrypriv.RegTxPowerIndexOverride = mBm;
 	  RTW_WARN("OpenHD:interpreting %d mBm as tx power index override",(int)mbm);
 	}
-	RTW_INFO("OpenHD:Tx power index is %d",padapter->registrypriv.RegTxPowerIndexOverride);
+	RTW_INFO("OpenHD:Tx power index override is %d",padapter->registrypriv.RegTxPowerIndexOverride);
 
 	pHalData->CurrentTxPwrIdx = value;
 	rtw_hal_set_tx_power_level(padapter, pHalData->current_channel);
