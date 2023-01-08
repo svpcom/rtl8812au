@@ -4227,14 +4227,16 @@ static struct xmit_frame* monitor_alloc_mgtxmitframe(struct xmit_priv *pxmitpriv
 	int delay = 300;
 	struct xmit_frame *pmgntframe = NULL;
 
-	for(tries = 3; tries >= 0; tries--) {
+	for(tries = 0; tries < 4; tries++) {
+		if(unlikely(tries > 0))
+		{
+			rtw_udelay_os(delay);
+			delay += delay/2;
+		}
 		pmgntframe = alloc_mgtxmitframe(pxmitpriv);
-		if(pmgntframe != NULL)
-			return pmgntframe;
-		rtw_udelay_os(delay);
-		delay += delay/2;
+		if(pmgntframe != NULL) break;
 	}
-	return NULL;
+	return pmgntframe;
 }
 
 s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
@@ -4266,8 +4268,10 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 	u8 category, action;
 	int type = -1;
 
-	if (skb)
-		rtw_mstat_update(MSTAT_TYPE_SKB, MSTAT_ALLOC_SUCCESS, skb->truesize);
+	if (unlikely(!skb))
+		goto fail;
+
+	rtw_mstat_update(MSTAT_TYPE_SKB, MSTAT_ALLOC_SUCCESS, skb->truesize);
 
 	if (unlikely(skb->len < sizeof(struct ieee80211_radiotap_header)))
 		goto fail;
@@ -4280,9 +4284,12 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 	if (unlikely(skb->len < rtap_len))
 		goto fail;
 
-	if ((pmgntframe = monitor_alloc_mgtxmitframe(pxmitpriv)) == NULL) {
+	pmgntframe = monitor_alloc_mgtxmitframe(pxmitpriv);
+	if (unlikely(pmgntframe == NULL)) {
 		DBG_COUNTER(padapter->tx_logs.core_tx_err_pxmitframe);
-		return NETDEV_TX_BUSY;
+		pxmitpriv->tx_drop++;
+		rtw_skb_free(skb);
+		return NETDEV_TX_OK;
 	}
 
 	ret = rtw_ieee80211_radiotap_iterator_init(&iterator, rtap_hdr, skb->len, NULL);
@@ -4393,7 +4400,12 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 	pmlmeext->mgnt_seq++;
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
-	dump_mgntframe(padapter, pmgntframe);
+	ret = dump_mgntframe(padapter, pmgntframe);
+	if (unlikely(ret != _SUCCESS))
+	{
+		pxmitpriv->tx_drop++;
+		goto fail;
+	}
 	DBG_COUNTER(padapter->tx_logs.core_tx);
 	pxmitpriv->tx_pkts++;
 	pxmitpriv->tx_bytes += skb->len;
