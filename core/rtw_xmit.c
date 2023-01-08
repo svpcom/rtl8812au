@@ -4222,20 +4222,11 @@ int rtw_ieee80211_radiotap_iterator_init(
 	int max_length, const struct ieee80211_radiotap_vendor_namespaces *vns);
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 24))
-static struct xmit_frame* monitor_alloc_mgtxmitframe(struct xmit_priv *pxmitpriv) {
-	int tries;
-	int delay = 300;
-	struct xmit_frame *pmgntframe = NULL;
-
-	for(tries = 3; tries >= 0; tries--) {
-		pmgntframe = alloc_mgtxmitframe(pxmitpriv);
-		if(pmgntframe != NULL)
-			return pmgntframe;
-		rtw_udelay_os(delay);
-		delay += delay/2;
-	}
-	return NULL;
+static struct xmit_frame* monitor_alloc_mgtxmitframe(struct xmit_priv *pxmitpriv)
+{
+	return alloc_mgtxmitframe(pxmitpriv);
 }
+
 
 s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 {
@@ -4280,9 +4271,20 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 	if (unlikely(skb->len < rtap_len))
 		goto fail;
 
+	if (pxmitpriv->free_xframe_ext_cnt <= 4 || // check tx queue if is about to get full
+            pxmitpriv->free_xmit_extbuf_cnt <= 4)  // check if we can allocate more buffers before even trying to do anything
+	{
+		pxmitpriv->tx_drop++;
+		rtw_skb_free(skb);
+		return NETDEV_TX_OK;
+	}
+
+
 	if ((pmgntframe = monitor_alloc_mgtxmitframe(pxmitpriv)) == NULL) {
 		DBG_COUNTER(padapter->tx_logs.core_tx_err_pxmitframe);
-		return NETDEV_TX_BUSY;
+		pxmitpriv->tx_drop++;
+		rtw_skb_free(skb);
+		return NETDEV_TX_OK;
 	}
 
 	ret = rtw_ieee80211_radiotap_iterator_init(&iterator, rtap_hdr, skb->len, NULL);
@@ -4393,7 +4395,11 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 	pmlmeext->mgnt_seq++;
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
-	dump_mgntframe(padapter, pmgntframe);
+	if (_SUCCESS != dump_mgntframe(padapter, pmgntframe) )
+	{
+		pxmitpriv->tx_drop++;
+		goto fail;
+	}
 	DBG_COUNTER(padapter->tx_logs.core_tx);
 	pxmitpriv->tx_pkts++;
 	pxmitpriv->tx_bytes += skb->len;
