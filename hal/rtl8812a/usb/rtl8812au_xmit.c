@@ -112,15 +112,24 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz , u8 ba
 	SET_TX_DESC_QUEUE_SEL_8812(ptxdesc,  pattrib->qsel);
 
 	/* offset 12 */
-
-	if (!pattrib->qos_en) {
-		SET_TX_DESC_HWSEQ_EN_8812(ptxdesc, 1); /* Hw set sequence number */
-	} else
-		SET_TX_DESC_SEQ_8812(ptxdesc, pattrib->seqnum);
+	// Not injected
+	if(pattrib->inject != 0xa5)
+	{
+		if (!pattrib->qos_en) {
+			SET_TX_DESC_HWSEQ_EN_8812(ptxdesc, 1); /* Hw set sequence number */
+		} else {
+			SET_TX_DESC_SEQ_8812(ptxdesc, pattrib->seqnum);
+		}
+	}
 
 	/* injected frame */
 	if(pattrib->inject == 0xa5) {
+		/* Prevent sequence number from being overwritten */
+		SET_TX_DESC_HWSEQ_EN_8812(ptxdesc, 0); /* Hw do not set sequence number */
+		SET_TX_DESC_SEQ_8812(ptxdesc, pattrib->seqnum); /* Copy inject sequence number to TxDesc */
+
 		SET_TX_DESC_RETRY_LIMIT_ENABLE_8812(ptxdesc, 1);
+
 		if (pattrib->retry_ctrl == _TRUE) {
 			SET_TX_DESC_DATA_RETRY_LIMIT_8812(ptxdesc, 6);
 		} else {
@@ -319,7 +328,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz , u8 ba
 			if (pattrib->retry_ctrl == _TRUE)
 				SET_TX_DESC_DATA_RETRY_LIMIT_8812(ptxdesc, 6);
 			else
-				SET_TX_DESC_DATA_RETRY_LIMIT_8812(ptxdesc, 12);
+				SET_TX_DESC_DATA_RETRY_LIMIT_8812(ptxdesc, 0);
 		}
 
 #ifdef CONFIG_XMIT_ACK
@@ -407,7 +416,9 @@ s32 rtl8812au_xmit_buf_handler(PADAPTER padapter)
 			break;
 
 		/* only XMITBUF_DATA & XMITBUF_MGNT */
+		pxmitframe = (struct xmit_frame *) pxmitbuf->priv_data;
 		rtw_write_port_and_wait(padapter, pxmitbuf->ff_hwaddr, pxmitbuf->len, (unsigned char *)pxmitbuf, 500);
+		rtw_free_xmitframe(pxmitpriv, pxmitframe);
 	} while (1);
 
 #ifdef CONFIG_LPS_LCLK
@@ -442,7 +453,7 @@ u32 upload_txpktbuf_8812au(_adapter *adapter, u8 *buf, u32 buflen)
 		}
 		rtw_write32(adapter, REG_PKTBUF_DBG_CTRL, 0xff800000+(beacon_head<<6) + qw_addr);
 		loop_cnt = 0;
-		while ((rtw_read32(adapter, REG_PKTBUF_DBG_CTRL) & BIT23) == false) {
+		while ((rtw_read32(adapter, REG_PKTBUF_DBG_CTRL) & BIT23) != _FALSE) {
 			rtw_udelay_os(10);
 			if (loop_cnt++ == 100)
 				return _FALSE;
