@@ -2683,19 +2683,28 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
 	}
 
 #ifdef CONFIG_P2P
-if (pwdinfo->driver_interface == DRIVER_CFG80211) {
-		if (!rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE)) {
-			rtw_p2p_set_state(pwdinfo, rtw_p2p_pre_state(pwdinfo));
+	if (pwdinfo->driver_interface == DRIVER_CFG80211) {
+		if (ssids->ssid != NULL
+			&& _rtw_memcmp(ssids->ssid, "DIRECT-", 7)
+			&& rtw_get_p2p_ie((u8 *)request->ie, request->ie_len, NULL, NULL)
+		) {
+			if (rtw_p2p_chk_state(pwdinfo, P2P_STATE_NONE))
+				rtw_p2p_enable(padapter, P2P_ROLE_DEVICE);
+			else {
+				rtw_p2p_set_pre_state(pwdinfo, rtw_p2p_state(pwdinfo));
+				#ifdef CONFIG_DEBUG_CFG80211
+				RTW_INFO("%s, role=%d, p2p_state=%d\n", __func__, rtw_p2p_role(pwdinfo), rtw_p2p_state(pwdinfo));
+				#endif
+			}
+			rtw_p2p_set_state(pwdinfo, P2P_STATE_LISTEN);
 
-			#if RTW_P2P_GROUP_INTERFACE
-			#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) || defined(COMPAT_KERNEL_RELEASE)
-			if (pwdev->iftype != NL80211_IFTYPE_P2P_CLIENT)
-			#endif
-			#endif
-				rtw_p2p_set_role(pwdinfo, P2P_ROLE_DEVICE);
-
-			RTW_INFO("%s, role=%d, p2p_state=%d, pre_p2p_state=%d\n", __func__, rtw_p2p_role(pwdinfo), rtw_p2p_state(pwdinfo), rtw_p2p_pre_state(pwdinfo));
-		}
+			if (request->n_channels == 3 &&
+				request->channels[0]->hw_value == 1 &&
+				request->channels[1]->hw_value == 6 &&
+				request->channels[2]->hw_value == 11
+			)
+            social_channel = 1;
+        }
 	}
 #endif /*CONFIG_P2P*/
 
@@ -7811,6 +7820,8 @@ static struct cfg80211_ops rtw_cfg80211_ops = {
 	.flush_pmksa = cfg80211_rtw_flush_pmksa,
 
 #ifdef CONFIG_AP_MODE
+    .add_virtual_intf = cfg80211_rtw_add_virtual_intf,
+	.del_virtual_intf = cfg80211_rtw_del_virtual_intf,
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3, 4, 0)) && !defined(COMPAT_KERNEL_RELEASE)
 	.add_beacon = cfg80211_rtw_add_beacon,
 	.set_beacon = cfg80211_rtw_set_beacon,
