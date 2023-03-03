@@ -23,8 +23,11 @@ jobs:
 
     - name: create installer
       run: |
-        ls -a
-        fpm -a armhf -s dir -t deb -n rtl8812au-autocompiler -v 2.3-evo-$(date '+%m%d%H%M') -C . -p rtl8812au-autocompiler.deb
+        mkdir ../temp
+        mv * ../temp
+        mkdir packagedir
+        mv ../temp/* packagedir
+        fpm -a armhf -s dir -t deb -n rtl8812au-autocompiler -v 2.3-evo-$(date '+%m%d%H%M') -C packagedir -p rtl8812au-autocompiler.deb
         ls -a
 
 
@@ -33,7 +36,7 @@ jobs:
       with:
         name: "rtl8812au-autocompiler"
         path: |
-          rtl8812au/*.deb
+          *.deb
           
     - name: Push
       id: push
@@ -47,4 +50,4 @@ jobs:
         distro: "any-distro"
         release: "any-version"
         republish: "true" # needed ONLY if version is not changing
-        file: "rtl8812au/*.deb"
+        file: "*.deb"

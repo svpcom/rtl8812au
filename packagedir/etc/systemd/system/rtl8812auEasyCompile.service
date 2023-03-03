@@ -1,0 +1,13 @@
+[Unit]
+Description=rtl8812au Compiler
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/rtl8812auEasyCompile.sh
+User=root
+
+
+[Install]
+WantedBy=multi-user.target
+
