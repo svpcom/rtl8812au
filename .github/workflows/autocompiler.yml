@@ -24,7 +24,7 @@ jobs:
     - name: create installer
       run: |
         ls -a
-        fpm -a armhf -s dir -t deb -n rtl8812au-autocompiler -v 2.3-evo-$(date '+%m%d%H%M') -C /opt/rtl8812au -p rtl8812au-autocompiler.deb
+        fpm -a armhf -s dir -t deb -n rtl8812au-autocompiler -v 2.3-evo-$(date '+%m%d%H%M') -C . -p rtl8812au-autocompiler.deb
         ls -a
 
 
