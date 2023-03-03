@@ -24,11 +24,12 @@ jobs:
     - name: create installer
       run: |
         mkdir ../temp
+        mkdir ../tmp2
+        mv packagedir/* ../tmp2
+        rm -Rf packagedir
         mv * ../temp
         mkdir -p packagedir/opt/rtl8812au/
         mv ../temp/* packagedir/opt/rtl8812au
-
-
         fpm -a armhf -s dir -t deb -n rtl8812au-autocompiler -v 2.3-evo-$(date '+%m%d%H%M') -C ./packagedir/ -p rtl8812au-autocompiler.deb
         ls -a
 
