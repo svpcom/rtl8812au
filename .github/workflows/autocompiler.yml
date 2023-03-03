@@ -18,9 +18,9 @@ jobs:
 
     - name: install dependencies
       run: |
-        apt install -y ruby-dev
-        gem install fpm
-        
+        sudo apt install -y ruby-dev
+        sudo gem install fpm
+
     - name: create installer
       run: |
         ls -a
