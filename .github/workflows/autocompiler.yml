@@ -16,6 +16,11 @@ jobs:
       with:
         submodules: recursive
 
+    - name: install dependencies
+      run: |
+        apt install -y ruby-dev
+        gem install fpm
+        
     - name: create installer
       run: |
         ls -a
