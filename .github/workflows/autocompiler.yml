@@ -24,8 +24,8 @@ jobs:
     - name: create installer
       run: |
         mkdir ../temp
-        mkdir ../tmp2
-        mv packagedir/* ../tmp2
+        mkdir ../temp2
+        mv packagedir/* ../temp2
         rm -Rf packagedir
         mv * ../temp
         mkdir -p packagedir/opt/rtl8812au/
