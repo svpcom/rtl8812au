@@ -25,12 +25,12 @@ jobs:
       run: |
         mkdir ../temp
         mkdir ../temp2
-        mv packagedir/* ../temp2
+        cp -r packagedir/* ../temp2
         rm -Rf packagedir
         mv * ../temp
         mkdir -p packagedir/opt/rtl8812au/
         mv ../temp/* packagedir/opt/rtl8812au
-        mv ../temp2/* packagedir/opt/rtl8812au
+        mv ../temp2/* packagedir/
         fpm -a armhf -s dir -t deb -n rtl8812au-autocompiler -v 2.3-evo-$(date '+%m%d%H%M') -C ./packagedir/ -p rtl8812au-autocompiler.deb
         ls -a
 
