@@ -299,7 +299,7 @@ int rtw_AcceptAddbaReq = _TRUE;/* 0:Reject AP's Add BA req, 1:Accept AP's Add BA
 
 int rtw_antdiv_cfg = 2; /* 0:OFF , 1:ON, 2:decide by Efuse config */
 int rtw_antdiv_type = 0
-	; /* 0:decide by efuse  1: for 88EE, 1Tx and 1RxCG are diversity.(2 Ant with SPDT), 2:  for 88EE, 1Tx and 2Rx are diversity.( 2 Ant, Tx and RxCG are both on aux port, RxCS is on main port ), 3: for 88EE, 1Tx and 1RxCG are fixed.(1Ant, Tx and RxCG are both on aux port) */
+	; /* 0:decide by efuse	1: for 88EE, 1Tx and 1RxCG are diversity.(2 Ant with SPDT), 2:	for 88EE, 1Tx and 2Rx are diversity.( 2 Ant, Tx and RxCG are both on aux port, RxCS is on main port ), 3: for 88EE, 1Tx and 1RxCG are fixed.(1Ant, Tx and RxCG are both on aux port) */
 
 int rtw_drv_ant_band_switch = 1; /* 0:OFF , 1:ON, Driver control antenna band switch*/
 
@@ -319,7 +319,7 @@ int rtw_hwpdn_mode = 2; /* 0:disable,1:enable,2: by EFUSE config */
 #ifdef CONFIG_HW_PWRP_DETECTION
 int rtw_hwpwrp_detect = 1;
 #else
-int rtw_hwpwrp_detect = 0; /* HW power  ping detect 0:disable , 1:enable */
+int rtw_hwpwrp_detect = 0; /* HW power	ping detect 0:disable , 1:enable */
 #endif
 
 #ifdef CONFIG_USB_HCI
@@ -375,7 +375,7 @@ MODULE_PARM_DESC(ifname, "The default name to allocate for first interface");
 module_param(if2name, charp, 0644);
 MODULE_PARM_DESC(if2name, "The default name to allocate for second interface");
 
-char *rtw_initmac = 0;  /* temp mac address if users want to use instead of the mac address in Efuse */
+char *rtw_initmac = 0;	/* temp mac address if users want to use instead of the mac address in Efuse */
 
 #ifdef CONFIG_CONCURRENT_MODE
 
@@ -1570,7 +1570,11 @@ int rtw_os_ndev_register(_adapter *adapter, const char *name)
 	u8 rtnl_lock_needed = rtw_rtnl_lock_needed(dvobj);
 
 #ifdef CONFIG_RTW_NAPI
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
+	netif_napi_add_weight(ndev, &adapter->napi, rtw_recv_napi_poll, RTL_NAPI_WEIGHT);
+#else
 	netif_napi_add(ndev, &adapter->napi, rtw_recv_napi_poll, RTL_NAPI_WEIGHT);
+#endif
 #endif /* CONFIG_RTW_NAPI */
 
 #if defined(CONFIG_IOCTL_CFG80211)
@@ -2596,7 +2600,13 @@ static int netdev_vir_if_close(struct net_device *pnetdev)
 
 #ifdef CONFIG_IOCTL_CFG80211
 	wdev->iftype = NL80211_IFTYPE_MONITOR;
+#if (CFG80211_API_LEVEL >= KERNEL_VERSION(5, 19, 2))
+	wdev->links[0].client.current_bss = NULL;
+	/* wdev->u.ibss.current_bss = NULL; */
+	// Or use wdev->connected?
+#else
 	wdev->current_bss = NULL;
+#endif
 	rtw_scan_abort(padapter);
 	rtw_cfg80211_wait_scan_req_empty(padapter, 200);
 	adapter_wdev_data(padapter)->bandroid_scan = _FALSE;
@@ -3593,7 +3603,9 @@ static int route_dump(u32 *gw_addr , int *gw_index)
 	struct msghdr msg;
 	struct iovec iov;
 	struct sockaddr_nl nladdr;
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0))
 	mm_segment_t oldfs;
+#endif
 	char *pg;
 	int size = 0;
 
@@ -3632,14 +3644,18 @@ static int route_dump(u32 *gw_addr , int *gw_index)
 	msg.msg_controllen = 0;
 	msg.msg_flags = MSG_DONTWAIT;
 
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0))
 	oldfs = get_fs();
 	set_fs(KERNEL_DS);
+#endif
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 1, 0))
 	err = sock_sendmsg(sock, &msg);
 #else
 	err = sock_sendmsg(sock, &msg, sizeof(req));
 #endif
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0))
 	set_fs(oldfs);
+#endif
 
 	if (err < 0)
 		goto out_sock;
@@ -3664,14 +3680,18 @@ restart:
 		iov_iter_init(&msg.msg_iter, READ, &iov, 1, PAGE_SIZE);
 #endif
 
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0))
 		oldfs = get_fs();
 		set_fs(KERNEL_DS);
+#endif
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 7, 0))
 		err = sock_recvmsg(sock, &msg, MSG_DONTWAIT);
 #else
 		err = sock_recvmsg(sock, &msg, PAGE_SIZE, MSG_DONTWAIT);
 #endif
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0))
 		set_fs(oldfs);
+#endif
 
 		if (err < 0)
 			goto out_sock_pg;
@@ -3742,14 +3762,18 @@ done:
 		msg.msg_controllen = 0;
 		msg.msg_flags = MSG_DONTWAIT;
 
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0))
 		oldfs = get_fs();
 		set_fs(KERNEL_DS);
+#endif
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 1, 0))
 		err = sock_sendmsg(sock, &msg);
 #else
 		err = sock_sendmsg(sock, &msg, sizeof(req));
 #endif
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0))
 		set_fs(oldfs);
+#endif
 
 		if (err > 0)
 			goto restart;
@@ -4770,7 +4794,7 @@ u8 rtw_get_gpio(struct net_device *netdev, u8 gpio_num)
 }
 EXPORT_SYMBOL(rtw_get_gpio);
 
-int  rtw_set_gpio_output_value(struct net_device *netdev, u8 gpio_num, bool isHigh)
+int rtw_set_gpio_output_value(struct net_device *netdev, u8 gpio_num, bool isHigh)
 {
 	u8 direction = 0;
 	u8 res = -1;
@@ -4785,7 +4809,8 @@ int rtw_config_gpio(struct net_device *netdev, u8 gpio_num, bool isOutput)
 	return rtw_hal_config_gpio(adapter, gpio_num, isOutput);
 }
 EXPORT_SYMBOL(rtw_config_gpio);
-int rtw_register_gpio_interrupt(struct net_device *netdev, int gpio_num, void(*callback)(u8 level))
+int rtw_register_gpio_interrupt(
+	struct net_device *netdev, int gpio_num, void(*callback)(u8 level))
 {
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(netdev);
 	return rtw_hal_register_gpio_interrupt(adapter, gpio_num, callback);
@@ -4803,8 +4828,8 @@ EXPORT_SYMBOL(rtw_disable_gpio_interrupt);
 
 #ifdef CONFIG_APPEND_VENDOR_IE_ENABLE
 
-int rtw_vendor_ie_get_api(struct net_device *dev, int ie_num, char *extra,
-		u16 extra_len)
+int rtw_vendor_ie_get_api(
+	struct net_device *dev, int ie_num, char *extra, u16 extra_len)
 {
 	int ret = 0;
 

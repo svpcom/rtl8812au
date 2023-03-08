@@ -140,8 +140,11 @@ int rtw_os_alloc_recvframe(_adapter *padapter, union recv_frame *precvframe, u8 
 
 		precvframe->u.hdr.pkt = rtw_skb_clone(pskb);
 		if (precvframe->u.hdr.pkt) {
-			precvframe->u.hdr.pkt->dev = padapter->pnetdev;
-			precvframe->u.hdr.rx_head = precvframe->u.hdr.rx_data = precvframe->u.hdr.rx_tail = pdata;
+		  RTW_INFO("%s: rtw_skb_clone success, RX throughput may be low!\n",
+			   __FUNCTION__);
+		  precvframe->u.hdr.pkt->dev = padapter->pnetdev;
+		  precvframe->u.hdr.rx_head = precvframe->u.hdr.rx_data
+		    = precvframe->u.hdr.rx_tail = pdata;
 			precvframe->u.hdr.rx_end =  pdata + alloc_sz;
 		} else {
 			RTW_INFO("%s: rtw_skb_clone fail\n", __FUNCTION__);
@@ -627,7 +630,9 @@ int rtw_recv_monitor(_adapter *padapter, union recv_frame *precv_frame)
 	}
 
 	skb->data = precv_frame->u.hdr.rx_data;
-	skb_set_tail_pointer(skb, precv_frame->u.hdr.len);
+	// MARKER
+	// skb_set_tail_pointer(skb, precv_frame->u.hdr.len);
+	skb->tail = precv_frame->u.hdr.rx_tail;
 	skb->len = precv_frame->u.hdr.len;
 	skb->ip_summed = CHECKSUM_NONE;
 	skb->pkt_type = PACKET_OTHERHOST;
