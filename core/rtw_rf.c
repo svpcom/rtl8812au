@@ -1806,7 +1806,7 @@ inline u8 rtw_is_5g_band4(u8 ch)
 
 inline u8 rtw_is_dfs_range(u32 hi, u32 lo)
 {
-	return rtw_is_range_overlap(hi, lo, 5720 + 10, 5260 - 10);
+	return 0; //rtw_is_range_overlap(hi, lo, 5720 + 10, 5260 - 10);
 }
 
 u8 rtw_is_dfs_ch(u8 ch)
