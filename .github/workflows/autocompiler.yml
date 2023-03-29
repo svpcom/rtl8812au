@@ -1,0 +1,57 @@
+name: autoinstaller
+
+on: [push]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: install dependencies
+      run: |
+        sudo apt install -y ruby-dev
+        sudo gem install fpm
+
+    - name: create installer
+      run: |
+        mkdir ../temp
+        mkdir ../temp2
+        cp -r packagedir/* ../temp2
+        rm -Rf packagedir
+        mv * ../temp
+        mkdir -p packagedir/opt/rtl8812au/
+        mv ../temp/* packagedir/opt/rtl8812au
+        mv ../temp2/* packagedir/
+        fpm -a armhf -s dir -t deb -n rtl8812au-autocompiler -v 2.3-evo-$(date '+%m%d%H%M') -C ./packagedir/ -p rtl8812au-autocompiler.deb --after-install packagedir/opt/rtl8812au/after-install.sh
+        ls -a
+
+
+    - name: Upload to Github
+      uses: 'actions/upload-artifact@v2'
+      with:
+        name: "rtl8812au-autocompiler"
+        path: |
+          *.deb
+          
+    - name: Push
+      id: push
+      uses: cloudsmith-io/action@master
+      with:
+        api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+        command: "push"
+        format: "deb"
+        owner: "openhd"
+        repo: "openhd-2-3-evo"
+        distro: "any-distro"
+        release: "any-version"
+        republish: "true" # needed ONLY if version is not changing
+        file: "*.deb"
