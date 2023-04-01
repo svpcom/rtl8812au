@@ -3317,6 +3317,10 @@ unsigned int on_action_spct_ch_switch(_adapter *padapter, struct sta_info *psta,
 
 		RTW_INFO(FUNC_NDEV_FMT" from "MAC_FMT"\n",
 			FUNC_NDEV_ARG(padapter->pnetdev), MAC_ARG(psta->cmn.mac_addr));
+        if(true){
+            RTW_WARN(FUNC_NDEV_FMT" from "MAC_FMT"OpenHD channel debug\n",
+                    FUNC_NDEV_ARG(padapter->pnetdev), MAC_ARG(psta->cmn.mac_addr));
+        }
 
 		for_each_ie(ie, ies, ies_len) {
 			if (ie->id == WLAN_EID_CHANNEL_SWITCH) {
