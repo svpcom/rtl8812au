@@ -5007,6 +5007,9 @@ struct cfg80211_chan_def *chandef){
     chandef->center_freq1 = center_freq;
     chandef->center_freq2 = center_freq2;
     //RTW_INFO("%s : channel %d width %d freq1 %d freq2 %d center_freq %d offset %d\n", __func__, channel, width, chandef->center_freq1, chandef->center_freq2, chandef->chan->center_freq,rtw_get_oper_choffset(padapter));
+    if(true){
+        RTW_WARN("OpenHD channel debug: %s : channel %d width %d freq1 %d freq2 %d center_freq %d offset %d\n", __func__, channel, width, chandef->center_freq1, chandef->center_freq2, chandef->chan->center_freq,rtw_get_oper_choffset(padapter));
+    }
   } else {
       return -EINVAL;
   }
@@ -5056,7 +5059,7 @@ static int	cfg80211_rtw_set_channel(struct wiphy *wiphy
 	RTW_INFO(FUNC_ADPT_FMT" ch:%d bw:%d, offset:%d\n"
 		, FUNC_ADPT_ARG(padapter), chan_target, chan_width, chan_offset);
 	if(true){
-	  RTW_WARN(FUNC_ADPT_FMT" ch:%d bw:%d, offset:%d OpenHD\n"
+	  RTW_WARN(FUNC_ADPT_FMT" ch:%d bw:%d, offset:%d OpenHD channel debug\n"
 		, FUNC_ADPT_ARG(padapter), chan_target, chan_width, chan_offset);
 	}
 
@@ -5160,7 +5163,7 @@ static int cfg80211_rtw_set_monitor_channel(struct wiphy *wiphy
 		, FUNC_ADPT_ARG(padapter), target_channal, target_width, target_offset);
 
 	if(true){
-	  RTW_INFO(FUNC_ADPT_FMT" ch:%d bw:%d, offset:%d OpenHD\n"
+	  RTW_INFO(FUNC_ADPT_FMT" ch:%d bw:%d, offset:%d OpenHD channel debug\n"
 		, FUNC_ADPT_ARG(padapter), target_channal, target_width, target_offset);
 	}
 	rtw_set_chbw_cmd(padapter, target_channal, target_width, target_offset, RTW_CMDF_WAIT_ACK);
