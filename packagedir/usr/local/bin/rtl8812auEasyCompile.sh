@@ -9,4 +9,5 @@ sudo rm -Rf /usr/local/bin/rtl8812auEasyCompile.sh
 echo "cleanup done"
 rm /etc/motd
 mv /etc/motd2 /etc/motd
+systemctl enable openhd
 reboot
