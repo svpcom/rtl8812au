@@ -588,6 +588,17 @@ int rtw_tx_pwr_by_rate = CONFIG_TXPWR_BY_RATE_EN;
 module_param(rtw_tx_pwr_by_rate, int, 0644);
 MODULE_PARM_DESC(rtw_tx_pwr_by_rate, "0:Disable, 1:Enable, 2: Depend on efuse");
 
+// OpenHD params
+int openhd_override_channel = 0;
+module_param(openhd_override_channel, int, 0644);
+MODULE_PARM_DESC(openhd_override_channel, "OpenHD easy (CRDA workaround)");
+//
+int openhd_override_channel_width = 0;
+module_param(openhd_override_channel_width, int, 0644);
+MODULE_PARM_DESC(openhd_override_channel_width, "OpenHD easy (CRDA workaround)");
+//
+
+
 #ifdef CONFIG_TXPWR_LIMIT
 int rtw_tx_pwr_lmt_enable = CONFIG_TXPWR_LIMIT_EN;
 module_param(rtw_tx_pwr_lmt_enable, int, 0644);
@@ -1012,6 +1023,11 @@ uint loadparam(_adapter *padapter)
 		rtw_tx_pwr_idx_override = MAX_POWER_INDEX;
 	registry_par->RegTxPowerIndexOverride = (u8)rtw_tx_pwr_idx_override;
 	RTW_INFO("OpenHD:rtw_tx_pwr_idx_override:%d\n",(int)rtw_tx_pwr_idx_override);
+
+    registry_par->openhd_override_channel = openhd_override_channel;
+    registry_par->openhd_override_channel_width = openhd_override_channel_width;
+    RTW_WARN("OpenHD: openhd_override_channel %d, openhd_override_channel_width: %d",
+             registry_par->openhd_override_channel,registry_par->openhd_override_channel_width);
 
 
 	rtw_regsty_load_target_tx_power(registry_par);

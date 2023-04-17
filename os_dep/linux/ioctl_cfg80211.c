@@ -5015,7 +5015,6 @@ struct cfg80211_chan_def *chandef){
       return -EINVAL;
   }
   return 0;
-
 }
 
 // Consti10: In monitor mode, this method seems to be not used (set_monitor_channel is used instead)
@@ -5164,6 +5163,18 @@ static int cfg80211_rtw_set_monitor_channel(struct wiphy *wiphy
 #endif
 	RTW_INFO(FUNC_ADPT_FMT" ch:%d bw:%d, offset:%d\n"
 		, FUNC_ADPT_ARG(padapter), target_channal, target_width, target_offset);
+
+    // OpenHD channel via module param
+    {
+        if(padapter->registrypriv.openhd_override_channel){
+            target_channal=padapter->registrypriv.openhd_override_channel;
+            RTW_WARN("OpenHD: using openhd_override_channel");
+        }
+        if(padapter->registrypriv.openhd_override_channel_width){
+            target_width=padapter->registrypriv.openhd_override_channel_width;
+            RTW_WARN("OpenHD: using openhd_override_channel_width");
+        }
+    }
 
 	if(true){
 	  RTW_WARN(FUNC_ADPT_FMT" ch:%d bw:%d, offset:%d OpenHD channel debug\n"
