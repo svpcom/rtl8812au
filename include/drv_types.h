@@ -334,6 +334,8 @@ struct registry_priv {
 #endif
 	u8	RegEnableTxPowerByRate;
 	u8	RegTxPowerIndexOverride;
+    int32_t openhd_override_channel;
+    int32_t openhd_override_channel_width;
 
 	u8 target_tx_pwr_valid;
 	s8 target_tx_pwr_2g[RF_PATH_MAX][RATE_SECTION_NUM];
