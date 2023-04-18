@@ -2158,6 +2158,9 @@ u8 rtw_set_chbw_cmd(_adapter *padapter, u8 ch, u8 bw, u8 ch_offset, u8 flags)
 exit:
 
 	RTW_INFO(FUNC_NDEV_FMT" res:%u\n", FUNC_NDEV_ARG(padapter->pnetdev), res);
+    if(true){
+        RTW_WARN(FUNC_NDEV_FMT" res:%u OpenHD channel debug\n", FUNC_NDEV_ARG(padapter->pnetdev), res);
+    }
 
 
 	return res;
