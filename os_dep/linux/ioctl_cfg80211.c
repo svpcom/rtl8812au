@@ -8077,7 +8077,6 @@ void rtw_wdev_unregister(struct wireless_dev *wdev)
 	#if (CFG80211_API_LEVEL >= KERNEL_VERSION(3, 11, 0)) || defined(COMPAT_KERNEL_RELEASE)
 	#if (CFG80211_API_LEVEL >= KERNEL_VERSION(5, 19, 2))
 	if (wdev->links[0].client.current_bss) {
-	/* if (wdev->u.ibss.current_bss) { */
 	  // Or use wdev->connected?
 	#else
 	if (wdev->current_bss) {
