@@ -1496,7 +1496,7 @@ u8 rtw_joinbss_cmd(_adapter  *padapter, struct wlan_network *pnetwork)
 #endif /* CONFIG_80211N_HT */
 
 #ifdef CONFIG_RTW_80211R
-	/*IEEE802.11-2012 Std. Table 8-101¡XAKM suite selectors*/
+	/*IEEE802.11-2012 Std. Table 8-101ï¿½XAKM suite selectors*/
 	if ((rtw_chk_ft_flags(padapter, RTW_FT_STA_SUPPORTED)) &&
 		((psecuritypriv->rsn_akm_suite_type == 3) || (psecuritypriv->rsn_akm_suite_type == 4))
 		) {
@@ -2103,6 +2103,10 @@ u8 rtw_set_chbw_cmd(_adapter *padapter, u8 ch, u8 bw, u8 ch_offset, u8 flags)
 
 	RTW_INFO(FUNC_NDEV_FMT" ch:%u, bw:%u, ch_offset:%u\n",
 		 FUNC_NDEV_ARG(padapter->pnetdev), ch, bw, ch_offset);
+    if(true){
+        RTW_WARN(FUNC_NDEV_FMT" ch:%u, bw:%u, ch_offset:%uOpenHD channel debug\n",
+                FUNC_NDEV_ARG(padapter->pnetdev), ch, bw, ch_offset);
+    }
 
 	/* check input parameter */
 

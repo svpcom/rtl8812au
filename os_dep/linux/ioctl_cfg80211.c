@@ -408,7 +408,6 @@ u8 rtw_cfg80211_ch_switch_notify(_adapter *adapter, u8 ch, u8 bw, u8 offset, u8 
 	if (ret != _SUCCESS)
 		goto exit;
 
-
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 3, 0))
 	cfg80211_ch_switch_notify(adapter->pnetdev, &chdef, 0, 0);
 #elif (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 19, 2))
@@ -5010,13 +5009,17 @@ struct cfg80211_chan_def *chandef){
     chandef->center_freq1 = center_freq;
     chandef->center_freq2 = center_freq2;
     //RTW_INFO("%s : channel %d width %d freq1 %d freq2 %d center_freq %d offset %d\n", __func__, channel, width, chandef->center_freq1, chandef->center_freq2, chandef->chan->center_freq,rtw_get_oper_choffset(padapter));
+    // Consti10: this method seems to be used
+    if(true){
+        RTW_WARN("OpenHD channel debug: %s : channel %d width %d freq1 %d freq2 %d center_freq %d offset %d\n", __func__, channel, width, chandef->center_freq1, chandef->center_freq2, chandef->chan->center_freq,rtw_get_oper_choffset(padapter));
+    }
   } else {
       return -EINVAL;
   }
   return 0;
-
 }
 
+// Consti10: In monitor mode, this method seems to be not used (set_monitor_channel is used instead)
 static int	cfg80211_rtw_set_channel(struct wiphy *wiphy
 	#if (CFG80211_API_LEVEL >= KERNEL_VERSION(2, 6, 35))
 	, struct net_device *ndev
@@ -5058,12 +5061,17 @@ static int	cfg80211_rtw_set_channel(struct wiphy *wiphy
 
 	RTW_INFO(FUNC_ADPT_FMT" ch:%d bw:%d, offset:%d\n"
 		, FUNC_ADPT_ARG(padapter), chan_target, chan_width, chan_offset);
+	if(true){
+	  RTW_WARN(FUNC_ADPT_FMT" ch:%d bw:%d, offset:%d OpenHD channel debug\n"
+		, FUNC_ADPT_ARG(padapter), chan_target, chan_width, chan_offset);
+	}
 
 	rtw_set_chbw_cmd(padapter, chan_target, chan_width, chan_offset, RTW_CMDF_WAIT_ACK);
 
 	return 0;
 }
 
+// Consti10: In monitor mode, this method is used the set the channel freq, at least on ubuntu 5.19.X
 static int cfg80211_rtw_set_monitor_channel(struct wiphy *wiphy
 #if (CFG80211_API_LEVEL >= KERNEL_VERSION(3, 8, 0))
 	, struct cfg80211_chan_def *chandef
@@ -5158,6 +5166,22 @@ static int cfg80211_rtw_set_monitor_channel(struct wiphy *wiphy
 	RTW_INFO(FUNC_ADPT_FMT" ch:%d bw:%d, offset:%d\n"
 		, FUNC_ADPT_ARG(padapter), target_channal, target_width, target_offset);
 
+    // OpenHD channel via module param
+    {
+        if(padapter->registrypriv.openhd_override_channel){
+            target_channal=padapter->registrypriv.openhd_override_channel;
+            RTW_WARN("OpenHD: using openhd_override_channel");
+        }
+        if(padapter->registrypriv.openhd_override_channel_width){
+            target_width=padapter->registrypriv.openhd_override_channel_width;
+            RTW_WARN("OpenHD: using openhd_override_channel_width");
+        }
+    }
+
+	if(true){
+	  RTW_WARN(FUNC_ADPT_FMT" ch:%d bw:%d, offset:%d OpenHD channel debug\n"
+		, FUNC_ADPT_ARG(padapter), target_channal, target_width, target_offset);
+	}
 	rtw_set_chbw_cmd(padapter, target_channal, target_width, target_offset, RTW_CMDF_WAIT_ACK);
 
 	return 0;
@@ -7819,6 +7843,7 @@ static struct cfg80211_ops rtw_cfg80211_ops = {
 	.flush_pmksa = cfg80211_rtw_flush_pmksa,
 
 #ifdef CONFIG_AP_MODE
+
 	.add_virtual_intf = cfg80211_rtw_add_virtual_intf,
 	.del_virtual_intf = cfg80211_rtw_del_virtual_intf,
 
