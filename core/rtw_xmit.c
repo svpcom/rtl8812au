@@ -26,6 +26,8 @@
 static u8 P802_1H_OUI[P80211_OUI_LEN] = { 0x00, 0x00, 0xf8 };
 static u8 RFC1042_OUI[P80211_OUI_LEN] = { 0x00, 0x00, 0x00 };
 
+static int openhd_tx_error_count=0;
+
 static void _init_txservq(struct tx_servq *ptxservq)
 {
 	_rtw_init_listhead(&ptxservq->tx_pending);
@@ -3372,6 +3374,8 @@ struct xmit_frame *rtw_alloc_xmitframe_ext(struct xmit_priv *pxmitpriv)
 	_list *plist, *phead;
 	_queue *queue = &pxmitpriv->free_xframe_ext_queue;
 
+    // OpenHD: From rtw_mlme_ext.c we go via function calls back to here
+    //RTW_WARN("OpenHD: calling rtw_alloc_xmitframe_ext");
 
 	_enter_critical_bh(&queue->lock, &irqL);
 
@@ -3813,6 +3817,7 @@ __inline static struct tx_servq *rtw_get_sta_pending
  */
 s32 rtw_xmit_classifier(_adapter *padapter, struct xmit_frame *pxmitframe)
 {
+    // OpenHD: I think here we pull out the first queue and actually transmit
 	/* _irqL irqL0; */
 	u8	ac_index;
 	struct sta_info	*psta;
@@ -4227,6 +4232,9 @@ static struct xmit_frame* monitor_alloc_mgtxmitframe(struct xmit_priv *pxmitpriv
 	int delay = 300;
 	struct xmit_frame *pmgntframe = NULL;
 
+    // OpenHD: Here a method that returns a frame if place is in the queue
+    // Is called 4 times with a (increasing) sleep until there is space in the queue
+    // If no space is in the queue after 4 calls, NULL is returned
 	for(tries = 3; tries >= 0; tries--) {
 		pmgntframe = alloc_mgtxmitframe(pxmitpriv);
 		if(pmgntframe != NULL)
@@ -4280,8 +4288,11 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 	if (unlikely(skb->len < rtap_len))
 		goto fail;
 
+    //RTW_WARN("OpenHD: calling monitor_alloc_mgtxmitframe X");
 	if ((pmgntframe = monitor_alloc_mgtxmitframe(pxmitpriv)) == NULL) {
 		DBG_COUNTER(padapter->tx_logs.core_tx_err_pxmitframe);
+        openhd_tx_error_count++;
+        RTW_WARN("OpenHD: monitor_alloc_mgtxmitframe - tx busy %d",openhd_tx_error_count);
 		return NETDEV_TX_BUSY;
 	}
 

@@ -1929,6 +1929,9 @@ PHY_HandleSwChnlAndSetBW8812(
 		RTW_INFO("PHY_HandleSwChnlAndSetBW8812:  not switch channel and not set bandwidth\n");
 		return;
 	}
+    if(true){
+        RTW_WARN("OpenHD channel debug: PHY_HandleSwChnlAndSetBW8812: bSwitchChannel %d, bSetBandWidth %d ChannelNum:%d\n",bSwitchChannel,bSetBandWidth,(int)ChannelNum);
+    }
 
 	/* skip change for channel or bandwidth is the same */
 	if (bSwitchChannel) {
@@ -2008,7 +2011,9 @@ PHY_HandleSwChnlAndSetBW8812(
 	/* RTW_INFO("CenterFrequencyIndex1 %d\n",pHalData->CurrentCenterFrequencyIndex1); */
 
 	/* RTW_INFO("<= PHY_HandleSwChnlAndSetBW8812: bSwChnl %d, bSetChnlBW %d\n",pHalData->bSwChnl,pHalData->bSetChnlBW); */
-
+    if(true){
+        RTW_WARN("OpenHD channel debug Channel %d ChannelBW %d ",pHalData->current_channel, pHalData->current_channel_bw);
+    }
 }
 
 VOID
