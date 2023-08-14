@@ -592,9 +592,6 @@ MODULE_PARM_DESC(rtw_tx_pwr_by_rate, "0:Disable, 1:Enable, 2: Depend on efuse");
 int openhd_override_channel = 0;
 module_param(openhd_override_channel, int, 0644);
 MODULE_PARM_DESC(openhd_override_channel, "OpenHD easy (CRDA workaround)");
-
-
-//
 int openhd_override_channel_width = 0;
 module_param(openhd_override_channel_width, int, 0644);
 MODULE_PARM_DESC(openhd_override_channel_width, "OpenHD easy (CRDA workaround)");
