@@ -552,6 +552,8 @@ s32 rtl8812au_xmitframe_complete(_adapter *padapter, struct xmit_priv *pxmitpriv
 	struct xmit_frame *pxmitframe = NULL;
 	struct xmit_frame *pfirstframe = NULL;
 
+    // OpenHD: I think here data is written via USB to the Chip
+
 	/* aggregate variable */
 	struct hw_xmit *phwxmit;
 	struct sta_info *psta = NULL;
