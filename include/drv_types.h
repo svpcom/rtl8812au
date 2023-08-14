@@ -29,6 +29,8 @@
 #include <wlan_bssdef.h>
 #include <wifi.h>
 #include <ieee80211.h>
+
+
 #ifdef CONFIG_ARP_KEEP_ALIVE
 	#include <net/neighbour.h>
 	#include <net/arp.h>
@@ -1672,5 +1674,10 @@ int rtw_suspend_free_assoc_resource(_adapter *padapter);
 	#include <pci_ops.h>
 	#include <pci_hal.h>
 #endif
+
+// OpenHD crda workaround
+int get_openhd_override_channel(void);
+int get_openhd_override_channel_width(void);
+
 
 #endif /* __DRV_TYPES_H__ */

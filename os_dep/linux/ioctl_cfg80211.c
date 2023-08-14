@@ -5165,6 +5165,10 @@ static int cfg80211_rtw_set_monitor_channel(struct wiphy *wiphy
 		, FUNC_ADPT_ARG(padapter), target_channal, target_width, target_offset);
 
     // OpenHD channel via module param
+    // update if module param has been updated
+    padapter->registrypriv.openhd_override_channel=get_openhd_override_channel();
+    padapter->registrypriv.openhd_override_channel_width=get_openhd_override_channel_width();
+    RTW_WARN("OpenHD: override %d %d",padapter->registrypriv.openhd_override_channel,padapter->registrypriv.openhd_override_channel_width);
     {
         if(padapter->registrypriv.openhd_override_channel){
             target_channal=padapter->registrypriv.openhd_override_channel;
