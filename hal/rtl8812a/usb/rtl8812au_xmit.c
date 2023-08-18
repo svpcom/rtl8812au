@@ -125,7 +125,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz , u8 ba
 		if (pattrib->retry_ctrl == _TRUE) {
             // OpenHD: See https://patchwork.kernel.org/project/linux-wireless/patch/477d745b-6bac-111d-403c-487fc19aa30d@gmail.com/
 			//SET_TX_DESC_DATA_RETRY_LIMIT_8812(ptxdesc, 6);
-            SET_TX_DESC_DATA_RETRY_LIMIT_8812(ptxdesc, 12);
+            SET_TX_DESC_DATA_RETRY_LIMIT_8812(ptxdesc, 32);
 		} else {
 			SET_TX_DESC_DATA_RETRY_LIMIT_8812(ptxdesc, 0);
 		}
