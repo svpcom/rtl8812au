@@ -4284,6 +4284,9 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 	u32 len = skb->len;
 	u8 category, action;
 	int type = -1;
+    // OpenHD debug
+    u64 before_allocate;
+    u64 delta_allocate;
 
 	if (skb)
 		rtw_mstat_update(MSTAT_TYPE_SKB, MSTAT_ALLOC_SUCCESS, skb->truesize);
@@ -4300,10 +4303,14 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 		goto fail;
 
     //RTW_WARN("OpenHD: calling monitor_alloc_mgtxmitframe X");
+    before_allocate=ktime_get_ns();
 	if ((pmgntframe = monitor_alloc_mgtxmitframe(pxmitpriv)) == NULL) {
 		DBG_COUNTER(padapter->tx_logs.core_tx_err_pxmitframe);
         openhd_monitor_alloc_mgtxmitframe_error_count++;
-        RTW_WARN("OpenHD: monitor_alloc_mgtxmitframe - tx busy %d",openhd_monitor_alloc_mgtxmitframe_error_count);
+        delta_allocate=ktime_get_ns()-before_allocate;
+        RTW_WARN("OpenHD: monitor_alloc_mgtxmitframe - (%dus) tx busy %d",
+                 (int)(delta_allocate/1000),
+                 openhd_monitor_alloc_mgtxmitframe_error_count);
 		return NETDEV_TX_BUSY;
 	}
 
