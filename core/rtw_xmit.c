@@ -3108,7 +3108,7 @@ struct xmit_buf *rtw_alloc_xmitbuf_ext(struct xmit_priv *pxmitpriv)
 
 	if (_rtw_queue_empty(pfree_queue) == _TRUE) {
         pxmitbuf = NULL;
-        RTW_WARN("OpenHD alloc rtw_alloc_xmitbuf_ext fail NR_XMIT_EXTBUFF:%d MAX_XMIT_EXTBUF_SZ:%d\n",NR_XMIT_EXTBUFF,MAX_XMIT_EXTBUF_SZ);
+        //RTW_WARN("OpenHD alloc rtw_alloc_xmitbuf_ext fail NR_XMIT_EXTBUFF:%d MAX_XMIT_EXTBUF_SZ:%d\n",NR_XMIT_EXTBUFF,MAX_XMIT_EXTBUF_SZ);
     }else {
 
 		phead = get_list_head(pfree_queue);
@@ -3379,7 +3379,7 @@ struct xmit_frame *rtw_alloc_xmitframe_ext(struct xmit_priv *pxmitpriv)
 
 	if (_rtw_queue_empty(queue) == _TRUE) {
 		pxframe =  NULL;
-        RTW_WARN("OpenHD alloc rtw_alloc_xmitframe_ext failed ");
+        //RTW_WARN("OpenHD alloc rtw_alloc_xmitframe_ext failed ");
 	} else {
 		phead = get_list_head(queue);
 		plist = get_next(phead);
@@ -4248,8 +4248,8 @@ static struct xmit_frame* monitor_alloc_mgtxmitframe(struct xmit_priv *pxmitpriv
 		if(pmgntframe != NULL)
 			return pmgntframe;
         openhd_alloc_mgtxmitframe_error_count++;
-        RTW_WARN("OpenHD: alloc_mgtxmitframe failed, retries:%d, total error count %d:%d",
-                 tries,openhd_alloc_mgtxmitframe_error_count,openhd_monitor_alloc_mgtxmitframe_error_count);
+        //RTW_WARN("OpenHD: alloc_mgtxmitframe failed, retries:%d, total error count %d:%d",
+        //         tries,openhd_alloc_mgtxmitframe_error_count,openhd_monitor_alloc_mgtxmitframe_error_count);
 		rtw_udelay_os(delay);
 		delay += delay/2;
 	}
