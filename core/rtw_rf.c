@@ -218,7 +218,8 @@ u8 rtw_get_scch_by_cch_offset(u8 cch, u8 bw, u8 offset)
 	}
 
 	/* 2.4G, 40MHz */
-	if (cch >= 3 && cch <= 11 && bw == CHANNEL_WIDTH_40) {
+	//if (cch >= 3 && cch <= 11 && bw == CHANNEL_WIDTH_40) {
+    if (cch >= 3 && cch <= 14 && bw == CHANNEL_WIDTH_40) { // OpenHD fix:
 		t_cch = (offset == HAL_PRIME_CHNL_OFFSET_UPPER) ? cch + 2 : cch - 2;
 		goto exit;
 	}
@@ -234,7 +235,8 @@ u8 rtw_get_scch_by_cch_offset(u8 cch, u8 bw, u8 offset)
 		goto exit;
 
 	/* 5G, 40MHz */
-	} else if (cch >= 38 && cch <= 175 && bw == CHANNEL_WIDTH_40) {
+	//} else if (cch >= 38 && cch <= 175 && bw == CHANNEL_WIDTH_40) {
+    } else if (cch >= 32 && cch <= 177 && bw == CHANNEL_WIDTH_40) { //OpenHD fix:
 		t_cch = (offset == HAL_PRIME_CHNL_OFFSET_UPPER) ? cch + 2 : cch - 2;
 		goto exit;
 

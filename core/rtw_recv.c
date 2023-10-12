@@ -3800,6 +3800,9 @@ static sint fill_radiotap_hdr(_adapter *padapter, union recv_frame *precvframe)
 
 		rt_len++;	// alignment
 	}
+    //RTW_WARN("OpenHD rx_pwdb_all:%d rx_power:%d recv_signal_power:%d bt_rx_rssi_percentage:%d signal_strength:%d SNR:[%d:%d:%d:%d]\n",pattrib->phy_info.rx_pwdb_all,pattrib->phy_info.rx_power,
+    //         pattrib->phy_info.recv_signal_power,pattrib->phy_info.bt_rx_rssi_percentage,pattrib->phy_info.signal_strength,
+    //         pattrib->phy_info.rx_snr[0],pattrib->phy_info.rx_snr[1],pattrib->phy_info.rx_snr[2],pattrib->phy_info.rx_snr[3]);
 
 	/* Signal Quality */
 	rtap_hdr->it_present |= (1 << IEEE80211_RADIOTAP_LOCK_QUALITY);
