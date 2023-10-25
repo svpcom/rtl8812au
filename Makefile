@@ -296,7 +296,11 @@ _BTC_FILES += hal/btc/halbtc8192e1ant.o \
 				hal/btc/halbtc8821c2ant.o
 endif
 
+ifeq ($(CONFIG_PLATFORM_ARM64_RPI), y)
+include $(TopDIR)/drivers/net/wireless/rtl8812au/hal/phydm/phydm.mk
+else
 include $(TopDIR)/hal/phydm/phydm.mk
+endif
 
 ########### HAL_RTL8812A_RTL8821A #################################
 ifneq ($(CONFIG_RTL8812A)_$(CONFIG_RTL8821A), n_n)
