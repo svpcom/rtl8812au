@@ -25,6 +25,22 @@
  * 1 ============================================================ */
 
 
+/*Store Ori Value*/
+#if defined(DM_ODM_CE_MAC80211)
+#define WEIGHTING_AVG(v1, w1, v2, w2)	\
+	__WEIGHTING_AVG(v1, w1, v2, w2, typeof(v1), typeof(w1), typeof(v2), \
+			typeof(w2))
+#define __WEIGHTING_AVG(v1, w1, v2, w2, t1, t2, t3, t4)	({	\
+	t1 __w_a_v1 = (v1);	\
+	t2 __w_a_w1 = (w1);	\
+	t3 __w_a_v2 = (v2);	\
+	t4 __w_a_w2 = (w2);	\
+	((__w_a_v1) * (__w_a_w1) + (__w_a_v2) * (__w_a_w2))	\
+	/ ((__w_a_w2) + (__w_a_w1)); })
+#else
+#define WEIGHTING_AVG(v1, w1, v2, w2) \
+	(((v1) * (w1) + (v2) * (w2)) / ((w2) + (w1)))
+#endif
 
 
 /* 1 ============================================================

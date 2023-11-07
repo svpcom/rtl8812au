@@ -28,6 +28,7 @@
 #define	CFO_HW_RPT_2_MHZ(val) ((val<<1) + (val>>1))
 /* ((X* 3125)  / 10)>>7 = (X*10)>>2 = X*2.5 = X<<1 + X>>1  */
 
+#define RSSI_MA 4 /*moving average factor for RSSI: 2^4=16 */
 #define PHYSTS_PATH_NUM 4
 
 /* ************************************************************
