@@ -40,7 +40,7 @@ EXTRA_LDFLAGS += --strip-debug
 ########################## WIFI IC ############################
 CONFIG_RTL8812A = y
 CONFIG_RTL8821A = y
-CONFIG_RTL8814A = y
+CONFIG_RTL8814A = n
 ######################### Interface ###########################
 CONFIG_USB_HCI = y
 ########################## Features ###########################
@@ -206,7 +206,7 @@ else
 EXTRA_CFLAGS += -DDBG=0
 endif
 
-ifeq ($(CONFIG_RTL8812A)_$(CONFIG_RTL8821A)_$(CONFIG_RTL8814A), y_y_y)
+ifeq ($(CONFIG_RTL8812A)_$(CONFIG_RTL8821A), y_y)
 
 EXTRA_CFLAGS += -DDRV_NAME=\"rtl88xxau_wfb\"
 ifeq ($(CONFIG_USB_HCI), y)
