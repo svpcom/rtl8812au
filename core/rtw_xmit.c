@@ -4309,7 +4309,7 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
         openhd_monitor_alloc_mgtxmitframe_error_count++;
         delta_allocate=ktime_get_ns()-before_allocate;
         RTW_WARN("OpenHD: monitor_alloc_mgtxmitframe - (%dus) tx busy %d",
-                 (int)(delta_allocate/1000),
+                 ((int)delta_allocate/1000),
                  openhd_monitor_alloc_mgtxmitframe_error_count);
 		return NETDEV_TX_BUSY;
 	}
