@@ -3252,31 +3252,23 @@ static int rtw_wx_get_nick(struct net_device *dev,
 	/* struct mlme_priv *pmlmepriv = &(padapter->mlmepriv); */
 	/* struct security_priv *psecuritypriv = &padapter->securitypriv; */
 
-#include <linux/ktime.h>
-
-// ... (other includes and code)
-
 if (extra) {
     wrqu->data.length = 23;
     wrqu->data.flags = 1;
 
-    // Compile-time date and time strings
-    const char* compile_date = __DATE__;
-    const char* compile_time = __TIME__;
+    time_t t;
+    struct tm* tm_info;
 
-    // Extract day, month, and year from the compile_date string
-    int compile_day, compile_month, compile_year;
-    sscanf(compile_date, "%s %d %d", NULL, &compile_month, &compile_day, &compile_year);
+    time(&t);
+    tm_info = localtime(&t);
 
-    // Format the compile date as ddmmyy
+    // Format the current date as ddmmyy
     char date_str[7];
-    sprintf(date_str, "%02d%02d%02d", compile_day, compile_month, compile_year % 100);
+    sprintf(date_str, "%02d%02d%02d", tm_info->tm_mday, tm_info->tm_mon + 1, tm_info->tm_year % 100);
 
-    // Replace "rtl8812au_openhd_221223" with "rtl8812au_openhd_ddmmyy"
-    _rtw_memcpy(extra, "rtl8812au_openhd_", 16);
-    _rtw_memcpy(extra + 16, date_str, 6);
+    _rtw_memcpy(extra, "rtl8812au_openhd_", 17);
+    _rtw_memcpy(extra + 17, date_str, 6);
 }
-
 
 	/* rtw_signal_process(pid, SIGUSR1); */ /* for test */
 
