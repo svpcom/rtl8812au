@@ -3252,11 +3252,23 @@ static int rtw_wx_get_nick(struct net_device *dev,
 	/* struct mlme_priv *pmlmepriv = &(padapter->mlmepriv); */
 	/* struct security_priv *psecuritypriv = &padapter->securitypriv; */
 
-	if (extra) {
-		wrqu->data.length = 16;
-		wrqu->data.flags = 1;
-		_rtw_memcpy(extra, "rtl8812au_openhd", 16);
-	}
+if (extra) {
+    wrqu->data.length = 23;
+    wrqu->data.flags = 1;
+
+    time_t t;
+    struct tm* tm_info;
+
+    time(&t);
+    tm_info = localtime(&t);
+
+    // Format the current date as ddmmyy
+    char date_str[7];
+    sprintf(date_str, "%02d%02d%02d", tm_info->tm_mday, tm_info->tm_mon + 1, tm_info->tm_year % 100);
+
+    _rtw_memcpy(extra, "rtl8812au_openhd_", 17);
+    _rtw_memcpy(extra + 17, date_str, 6);
+}
 
 	/* rtw_signal_process(pid, SIGUSR1); */ /* for test */
 
