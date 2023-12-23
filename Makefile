@@ -24,6 +24,7 @@ EXTRA_CFLAGS += -Wno-cast-function-type
 EXTRA_CFLAGS += -Wno-date-time
 EXTRA_CFLAGS += -Wno-misleading-indentation
 EXTRA_CFLAGS += -Wno-uninitialized
+CFLAGS += -Wno-declaration-after-statement
 # Relax some warnings from '-Wextra' so we won't get flooded with warnings
 EXTRA_CFLAGS += -Wno-sign-compare
 #EXTRA_CFLAGS += -Wno-missing-field-initializers
