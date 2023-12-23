@@ -3252,25 +3252,11 @@ static int rtw_wx_get_nick(struct net_device *dev,
 	/* struct mlme_priv *pmlmepriv = &(padapter->mlmepriv); */
 	/* struct security_priv *psecuritypriv = &padapter->securitypriv; */
 
-if (extra) {
-    wrqu->data.length = 23;
-    wrqu->data.flags = 1;
-
-    // Compile-time date and time strings
-    const char* compile_date = __DATE__;
-    const char* compile_time = __TIME__;
-
-    // Extract day, month, and year from the compile_date string
-    int compile_day, compile_month, compile_year;
-    sscanf(compile_date, "%s %d %d", NULL, &compile_month, &compile_day, &compile_year);
-
-    // Format the compile date as ddmmyy
-    char date_str[7];
-    sprintf(date_str, "%02d%02d%02d", compile_day, compile_month, compile_year % 100);
-
-	_rtw_memcpy(extra, "rtl8812au_openhd_", 17);
-	_rtw_memcpy(extra + 17, date_str, 6);
-}
+	if (extra) {
+		wrqu->data.length = 16;
+		wrqu->data.flags = 1;
+		_rtw_memcpy(extra, "rtl8812au_openhd", 16);
+	}
 
 	/* rtw_signal_process(pid, SIGUSR1); */ /* for test */
 

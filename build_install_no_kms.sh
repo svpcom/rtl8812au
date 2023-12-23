@@ -4,6 +4,6 @@
 make
 make
 
-sudo rmmod 88XXau_wfb
+sudo rmmod 88XXau_ohd
 
-sudo insmod 88XXau_wfb.ko
+sudo insmod 88XXau_ohd.ko
