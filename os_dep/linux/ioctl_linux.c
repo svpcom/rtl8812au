@@ -3268,8 +3268,6 @@ if (extra) {
     char date_str[7];
     sprintf(date_str, "%02d%02d%02d", compile_day, compile_month, compile_year % 100);
 
-    printf("date_str: %s\n", date_str);
-
 	_rtw_memcpy(extra, "rtl8812au_openhd_", 17);
 	_rtw_memcpy(extra + 17, date_str, 6);
 }
