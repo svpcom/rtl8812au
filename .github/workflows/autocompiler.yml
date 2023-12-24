@@ -24,11 +24,10 @@ jobs:
     - name: create installer
       run: |
         sudo apt update 
-        sudo apt install -y build-essential gcc-arm-linux-gnueabi tree
-        export CROSS_COMPILE=arm-linux-gnueabi-
-        export ARCH=arm
+        sudo apt install -y build-essential tree
         ls
         make
+        ls
         # mkdir ../temp
         # mkdir ../temp2
         # cp -r packagedir/* ../temp2
