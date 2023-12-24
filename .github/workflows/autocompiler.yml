@@ -1,4 +1,4 @@
-name: autoinstaller
+name: Compile test
 
 on: [push]
 
@@ -23,16 +23,22 @@ jobs:
 
     - name: create installer
       run: |
-        mkdir ../temp
-        mkdir ../temp2
-        cp -r packagedir/* ../temp2
-        rm -Rf packagedir
-        mv * ../temp
-        mkdir -p packagedir/opt/rtl8812au/
-        mv ../temp/* packagedir/opt/rtl8812au
-        mv ../temp2/* packagedir/
-        fpm -a arm64 -s dir -t deb -n rtl8812au-autocompiler -v 2.3.4-$(date '+%m%d%H%M') -C ./packagedir/ -p rtl8812au-autocompiler.deb --after-install packagedir/opt/rtl8812au/after-install.sh
-        ls -a
+        sudo apt update 
+        sudo apt install -y build-essential gcc-arm-linux-gnueabi tree
+        export CROSS_COMPILE=arm-linux-gnueabi-
+        export ARCH=arm
+        cd rlt8812au
+        make
+        # mkdir ../temp
+        # mkdir ../temp2
+        # cp -r packagedir/* ../temp2
+        # rm -Rf packagedir
+        # mv * ../temp
+        # mkdir -p packagedir/opt/rtl8812au/
+        # mv ../temp/* packagedir/opt/rtl8812au
+        # mv ../temp2/* packagedir/
+        # fpm -a arm64 -s dir -t deb -n rtl8812au-autocompiler -v 2.3.4-$(date '+%m%d%H%M') -C ./packagedir/ -p rtl8812au-autocompiler.deb --after-install packagedir/opt/rtl8812au/after-install.sh
+        # ls -a
 
 
     - name: Upload to Github
@@ -50,7 +56,7 @@ jobs:
         command: "push"
         format: "deb"
         owner: "openhd"
-        repo: "openhd-2-3-evo"
+        repo: "release"
         distro: "any-distro"
         release: "any-version"
         republish: "true" # needed ONLY if version is not changing
