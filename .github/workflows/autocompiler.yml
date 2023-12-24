@@ -27,7 +27,7 @@ jobs:
         sudo apt install -y build-essential gcc-arm-linux-gnueabi tree
         export CROSS_COMPILE=arm-linux-gnueabi-
         export ARCH=arm
-        cd rlt8812au
+        ls
         make
         # mkdir ../temp
         # mkdir ../temp2
