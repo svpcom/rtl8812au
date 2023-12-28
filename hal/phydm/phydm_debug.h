@@ -122,11 +122,11 @@
 #endif
 
 #if DBG
-#define PHYDM_DBG(p_dm, comp, fmt, args...)                                     \
+#define PHYDM_DBG(p_dm, comp, fmt)				\
 	do {													\
 		if ((comp) & (p_dm->debug_components)) {	\
 														\
-			dbg_print("[PHYDM] " ## args);						\
+			dbg_print("[PHYDM] ");						\
 			RT_PRINTK fmt;								\
 		}												\
 	} while (0)
@@ -177,7 +177,7 @@
 	} while (0)
 
 #else
-#define PHYDM_DBG(p_dm, comp, fmt, args...)
+#define PHYDM_DBG(p_dm, comp, fmt)
 #define PHYDM_DBG_F(p_dm, comp, fmt)
 #define PHYDM_PRINT_ADDR(p_dm, comp, title_str, ptr)
 
