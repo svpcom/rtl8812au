@@ -33,5 +33,6 @@ jobs:
             cd rtl8812au
             sudo apt update 
             sudo apt install -y build-essential tree
-            make
+            git clone --depth=1 https://github.com/OpenHD/OpenHD-KernelBuilder
+            make KSRC=OpenHD-KernelBuilder M=$(pwd) modules
             ls
