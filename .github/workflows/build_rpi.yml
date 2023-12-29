@@ -32,7 +32,7 @@ jobs:
             cd /opt
             cd rtl8812au
             sudo apt update 
-            sudo apt install -y build-essential tree
+            sudo apt install -y build-essential tree git build-essential bc
             git clone --depth=1 https://github.com/OpenHD/OpenHD-KernelBuilder
             make KSRC=OpenHD-KernelBuilder M=$(pwd) modules
             ls
