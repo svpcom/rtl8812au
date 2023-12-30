@@ -1,3 +1,4 @@
+VERSION_HEADER = include/rtw_version.h
 EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS) -fno-pie
 EXTRA_CFLAGS += -O1
 #EXTRA_CFLAGS += -O3
@@ -1603,6 +1604,8 @@ export CONFIG_RTL8812AU = m
 all: modules
 
 modules:
+	    @echo '#define DRIVERVERSION "v5.2.20.2_ohd_$(shell git rev-parse --short HEAD)"' > $(VERSION_HEADER)
+	 
 	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) M=$(shell pwd) O="$(KBUILD_OUTPUT)" modules
 
 strip:
@@ -1658,6 +1661,7 @@ config_r:
 .PHONY: modules clean
 
 clean:
+	@echo '#define DRIVERVERSION "v5.2.20.2_ohd_THIS_IS_DIRTY"' > $(VERSION_HEADER)
 	#$(MAKE) -C $(KSRC) M=$(shell pwd) clean
 	cd hal ; rm -fr */*/*/*.mod.c */*/*/*.mod */*/*/*.o */*/*/*.o.* */*/*/.*.cmd */*/*/*.ko
 	cd hal ; rm -fr */*/*.mod.c */*/*.mod */*/*.o */*/*.o.* */*/.*.cmd */*/*.ko
@@ -1672,4 +1676,5 @@ clean:
 	rm -fr *.mod.c *.mod *.o *.o.* .*.cmd *.ko *~
 	rm -fr .tmp_versions
 	rm -fr .cache.mk
+
 endif
