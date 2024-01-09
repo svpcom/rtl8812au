@@ -26,6 +26,12 @@ ls -a /lib/modules/6.3.13-060313-generic/
 echo "---------"
 
 make KSRC=/usr/src/linux-headers-6.3.13-060313-generic O="" modules
+mkdir package
+cp *.ko package
+
+
+fpm -a AMD64 -s dir -t deb -n RTL8812AU-X86 -v 2.5-evo-$(date '+%m%d%H%M') -C package -p RTL8812AU-X86.deb
+
 echo "copied deb file"
 echo "push to cloudsmith"
 git describe --exact-match HEAD >/dev/null 2>&1
