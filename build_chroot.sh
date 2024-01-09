@@ -21,7 +21,7 @@ echo ${ARCH}
 sudo apt update 
 sudo apt install -y build-essential
 ls -a /usr/src/
-make
+#make
 ls
 echo "copied deb file"
 echo "push to cloudsmith"
