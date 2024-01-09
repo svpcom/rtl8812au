@@ -16,14 +16,9 @@ jobs:
       with:
         submodules: recursive
 
-    - name: install dependencies
-      run: |
-        sudo apt install -y ruby-dev
-        sudo gem install fpm
-
     - name: build on x86
       run: |
         sudo apt update 
-        sudo apt install -y build-essential tree
+        sudo apt install -y build-essential
         make
         ls
