@@ -20,8 +20,8 @@ echo ${ARCH}
 
 sudo apt update 
 sudo apt install -y build-essential
+ls -a /lib/modules/linux-headers-6.3.13-060313/build
 make ARCH=x86_64 CROSS_COMPILE= -C /lib/modules/linux-headers-6.3.13-060313/build M=/home/runner/work/rtl8812au/rtl8812au O="" modules
-ls
 echo "copied deb file"
 echo "push to cloudsmith"
 git describe --exact-match HEAD >/dev/null 2>&1
