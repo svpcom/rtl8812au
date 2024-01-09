@@ -26,7 +26,7 @@ echo "hier"
 ls -a /lib/modules/
 echo "hier"
 
-#make
+make
 ls
 echo "copied deb file"
 echo "push to cloudsmith"
