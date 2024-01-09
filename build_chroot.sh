@@ -3,7 +3,7 @@
 # We're using cloudsmith-cli to upload the file in CHROOT
 
 sudo apt install -y python3-pip
-sudo pip3 install --upgrade cloudsmith-cli
+sudo pip3 install --upgrade cloudsmith-cli --break-system-packages
 ls -a
 API_KEY=$(cat cloudsmith_api_key.txt)
 DISTRO=$(cat distro.txt)
