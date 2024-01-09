@@ -28,8 +28,8 @@ echo "---------"
 
 make KSRC=/usr/src/linux-headers-6.3.13-060313-generic O="" modules
 
-ls -a mkdir package/lib/modules/6.3.13-060313-generic/kernel/drivers/net/wireless/realtek/
-mkdir package/lib/modules/6.3.13-060313-generic/kernel/drivers/net/wireless/realtek/rtl88x2bu/
+ls -a package/lib/modules/6.3.13-060313-generic/kernel/drivers/net/wireless/realtek/
+mkdir -p package/lib/modules/6.3.13-060313-generic/kernel/drivers/net/wireless/realtek/rtl8812au/
 
 cp *.ko package/lib/modules/6.3.13-060313-generic/kernel/drivers/net/wireless/realtek/rtl8812au/
 
