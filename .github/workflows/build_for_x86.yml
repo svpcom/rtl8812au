@@ -1,4 +1,4 @@
-name: build_package_x20_debian
+name: build_test
 
 on: [push]
 
@@ -42,4 +42,4 @@ jobs:
           cd /opt/ChrootCompilationTest/
           sudo apt update
           sudo bash install_dep.sh
-          sudo bash ./build.sh x86 $API_KEY ubuntu lunar
+          sudo bash ./build.sh x86-lunar $API_KEY ubuntu lunar
