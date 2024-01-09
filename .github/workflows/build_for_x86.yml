@@ -1,4 +1,4 @@
-name: build on custom image
+name: build on x86 lunar
 
 on: [push]
 
