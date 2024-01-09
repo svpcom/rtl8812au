@@ -37,6 +37,7 @@ fpm -a AMD64 -s dir -t deb -n rtl8812au-x86 -v 2.5-evo-$(date '+%m%d%H%M') -C pa
 
 echo "copied deb file"
 echo "push to cloudsmith"
+eco $PWD
 git describe --exact-match HEAD >/dev/null 2>&1
 echo "Pushing the package to OpenHD 2.5 repository"
 ls -a
