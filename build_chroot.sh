@@ -20,13 +20,7 @@ echo ${ARCH}
 
 sudo apt update 
 sudo apt install -y build-essential
-echo "hier"
-ls -a /usr/src/
-echo "hier"
-ls -a /lib/modules/
-echo "hier"
-
-make
+make ARCH=x86_64 CROSS_COMPILE= -C /lib/modules/linux-headers-6.3.13-060313/build M=/home/runner/work/rtl8812au/rtl8812au O="" modules
 ls
 echo "copied deb file"
 echo "push to cloudsmith"
