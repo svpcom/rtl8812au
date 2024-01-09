@@ -2,7 +2,8 @@
 # This file is the install instruction for the CHROOT build
 # We're using cloudsmith-cli to upload the file in CHROOT
 
-sudo apt install -y python3-pip
+sudo apt install -y python3-pip ruby ruby-dev rubygems build-essential
+gem install --no-ri --no-rdoc fpm
 sudo pip3 install --upgrade cloudsmith-cli --break-system-packages
 ls -a
 API_KEY=$(cat cloudsmith_api_key.txt)
