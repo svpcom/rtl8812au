@@ -28,7 +28,9 @@ echo "---------"
 
 make KSRC=/usr/src/linux-headers-6.3.13-060313-generic O="" modules
 
-mkdir -p package/lib/modules/6.3.13-060313-generic/kernel/drivers/net/wireless/realtek/rtl88x2bu/
+ls -a mkdir package/lib/modules/6.3.13-060313-generic/kernel/drivers/net/wireless/realtek/
+mkdir package/lib/modules/6.3.13-060313-generic/kernel/drivers/net/wireless/realtek/rtl88x2bu/
+
 cp *.ko package/lib/modules/6.3.13-060313-generic/kernel/drivers/net/wireless/realtek/rtl8812au/
 
 fpm -a AMD64 -s dir -t deb -n rtl8812au-x86 -v 2.5-evo-$(date '+%m%d%H%M') -C package -p rtl8812au-x86.deb
@@ -38,4 +40,4 @@ echo "push to cloudsmith"
 git describe --exact-match HEAD >/dev/null 2>&1
 echo "Pushing the package to OpenHD 2.5 repository"
 ls -a
-cloudsmith push deb --api-key "$API_KEY" openhd/${REPO}/${DISTRO}/${FLAVOR} *.deb || exit 1
+cloudsmith push deb --api-key "$API_KEY" openhd/release/ubuntu/lunar rtl8812au-x86.deb || exit 1
