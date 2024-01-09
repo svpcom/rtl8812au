@@ -28,25 +28,11 @@ echo "---------"
 
 make KSRC=/usr/src/linux-headers-6.3.13-060313-generic O="" modules
 
-mkdir -p package/lib/modules/6.3.13-060313-generic/kernel/drivers/net/wireless/realtek/rtl8812au/
+mkdir -p package/lib/modules/6.3.13-060313-generic/kernel/drivers/net/wireless/
 
-echo "_________________________________________________________________________"
-ls -a package/lib/modules/6.3.13-060313-generic/kernel/drivers/net/wireless/realtek/
-echo "_________________________________________________________________________"
-ls -a package/lib/modules/6.3.13-060313-generic/kernel/drivers/net/wireless/
-echo "_________________________________________________________________________"
-ls -a package/lib/modules/6.3.13-060313-generic/kernel/drivers/net/
-echo "_________________________________________________________________________"
-ls -a package/lib/modules/6.3.13-060313-generic/kernel/drivers/
-echo "_________________________________________________________________________"
-ls -a package/lib/modules/6.3.13-060313-generic/kernel/
-echo "_________________________________________________________________________"
-ls -a package/lib/modules/6.3.13-060313-generic/
-echo "_________________________________________________________________________"
+cp *.ko package/lib/modules/6.3.13-060313-generic/kernel/drivers/net/wireless/
 
-cp *.ko package/lib/modules/6.3.13-060313-generic/kernel/drivers/net/wireless/realtek/rtl8812au/
-
-fpm -a AMD64 -s dir -t deb -n rtl8812au-x86 -v 2.5-evo-$(date '+%m%d%H%M') -C package -p rtl8812au-x86.deb
+fpm -a AMD64 -s dir -t deb -n rtl8812au-x86 -v 2.5-evo-$(date '+%m%d%H%M') -C package -p rtl8812au-x86.deb --before-install before-install.sh
 
 echo "copied deb file"
 echo "push to cloudsmith"
