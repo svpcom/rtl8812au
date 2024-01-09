@@ -25,7 +25,7 @@ echo "---------"
 ls -a /lib/modules/6.3.13-060313-generic/
 echo "---------"
 
-make ARCH=x86_64 CROSS_COMPILE= -C /usr/src/linux-headers-6.3.13-060313-generic O="" modules
+make KSRC=/usr/src/linux-headers-6.3.13-060313-generic O="" modules
 echo "copied deb file"
 echo "push to cloudsmith"
 git describe --exact-match HEAD >/dev/null 2>&1
