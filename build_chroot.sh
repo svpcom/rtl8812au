@@ -19,7 +19,7 @@ echo ${ARCH}
 
 
 sudo apt update 
-sudo apt install -y build-essential flex bc
+sudo apt install -y build-essential flex bc bison dkms
 ls -a /lib/modules/
 echo "---------"
 ls -a /lib/modules/6.3.13-060313-generic/
