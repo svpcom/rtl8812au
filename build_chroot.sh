@@ -20,7 +20,12 @@ echo ${ARCH}
 
 sudo apt update 
 sudo apt install -y build-essential
+echo "hier"
 ls -a /usr/src/
+echo "hier"
+ls -a /lib/modules/
+echo "hier"
+
 #make
 ls
 echo "copied deb file"
