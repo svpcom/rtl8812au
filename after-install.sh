@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-depmod -a
+# depmod -a
