@@ -18,6 +18,10 @@ echo ${FLAVOR}
 echo ${CUSTOM}
 echo ${ARCH}
 
+if [[ $(tr -d '\0' </proc/device-tree/model) == *"Raspberry Pi"* ]]; then
+    echo "Running on a Raspberry Pi"
+else
+    echo "Running on something else"
 
 sudo apt update 
 sudo apt install -y build-essential flex bc bison dkms
@@ -33,3 +37,4 @@ git describe --exact-match HEAD >/dev/null 2>&1
 echo "Pushing the package to OpenHD 2.5 repository"
 ls -a
 cloudsmith push deb --api-key "$API_KEY" openhd/release/ubuntu/lunar rtl8812au-x86.deb || exit 1
+fi
