@@ -20,6 +20,11 @@ echo ${ARCH}
 
 if [[ -e /etc/os-release && $(grep -c "Raspbian" /etc/os-release) -gt 0 ]]; then
     echo "building for the raspberry pi"
+    sudo apt update 
+    sudo apt install -y build-essential flex bc bison dkms raspberrypi-kernel-headers
+    echo "---------------"
+    echo "_____________________________________________"
+    ls -a /usr/src/
 else
 
 sudo apt update 
