@@ -18,10 +18,9 @@ echo ${FLAVOR}
 echo ${CUSTOM}
 echo ${ARCH}
 
-if [[ $(tr -d '\0' </proc/device-tree/model) == *"Raspberry Pi"* ]]; then
-    echo "Running on a Raspberry Pi"
+if [[ -e /etc/os-release && $(grep -c "Raspbian" /etc/os-release) -gt 0 ]]; then
+    echo "building for the raspberry pi"
 else
-    echo "Running on something else"
 
 sudo apt update 
 sudo apt install -y build-essential flex bc bison dkms
