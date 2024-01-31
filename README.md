@@ -96,7 +96,7 @@ $ sed -i 's/CONFIG_PLATFORM_ARM64_RPI = n/CONFIG_PLATFORM_ARM64_RPI = y/g' Makef
   ```
   $ airmon-ng check kill
   ```
-  You may also uncheck the box "Automatically connect to this network when it is avaiable" in nm-connection-editor. This only works if you have a saved wifi connection.
+  You may also uncheck the box "Automatically connect to this network when it is available" in nm-connection-editor. This only works if you have a saved wifi connection.
   
   2. Set interface down
   ```
