@@ -33,7 +33,7 @@
 				/* #define MAX_RECVBUF_SZ (15360) */ /* 15k < 16k */
 				/* #define MAX_RECVBUF_SZ (8192+1024) */ /* 8K+1k */
 			#else
-				#define MAX_RECVBUF_SZ (4000) /* about 4K */
+				#define MAX_RECVBUF_SZ (4096) /* about 4K */
 			#endif
 		#endif
 	#endif /* !MAX_RECVBUF_SZ */
