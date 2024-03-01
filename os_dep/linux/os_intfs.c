@@ -1000,10 +1000,6 @@ uint loadparam(_adapter *padapter)
 #endif
 	registry_par->RegEnableTxPowerByRate = (u8)rtw_tx_pwr_by_rate;
 
-	if (rtw_tx_pwr_idx_override > MAX_POWER_INDEX)
-		rtw_tx_pwr_idx_override = MAX_POWER_INDEX;
-	registry_par->RegTxPowerIndexOverride = (u8)rtw_tx_pwr_idx_override;
-
 	rtw_regsty_load_target_tx_power(registry_par);
 
 	registry_par->TxBBSwing_2G = (s8)rtw_TxBBSwing_2G;
