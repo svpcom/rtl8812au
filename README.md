@@ -112,11 +112,11 @@ $ sed -i 's/CONFIG_PLATFORM_ARM64_RPI = n/CONFIG_PLATFORM_ARM64_RPI = y/g' Makef
   ```
   $ ip link set <wlan1> up
   ```
-For setting TX power
+For setting TX power to a fixed index (1=min, 63=max)
 ```
-$ iwconfig <wlan1> txpower 30
+$ iwconfig <wlan1> txpower -30
 or
-$ iw <wlan1> set txpower fixed 3000
+$ iw <wlan1> set txpower fixed -3000
 ```
 ### LED control
 
