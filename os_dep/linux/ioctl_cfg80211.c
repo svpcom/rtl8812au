@@ -3727,13 +3727,14 @@ static int cfg80211_rtw_get_txpower(struct wiphy *wiphy,
 #endif
 	int *dbm)
 {
+	u8 override;
 	_adapter *padapter = wiphy_to_adapter(wiphy);
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(padapter);
 
 	RTW_INFO("%s\n", __func__);
 
 	// *dbm = (12);
-	u8 override = get_overridden_tx_power_index(0);
+	override = get_overridden_tx_power_index(0);
 	if (override)
 		*dbm = -(int)override;
 	else
