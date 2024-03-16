@@ -374,7 +374,7 @@ s32 rtl8814au_xmit_buf_handler(PADAPTER padapter)
 				, ("%s: bDriverStopped(%s) bSurpriseRemoved(%s)!\n"
 				, __func__
 				, rtw_is_drv_stopped(padapter)?"True":"False"
-				, rtw_is_surprise_removed(padapter)?"True":"False");
+				, rtw_is_surprise_removed(padapter)?"True":"False"));
 		return _FAIL;
 	}
 

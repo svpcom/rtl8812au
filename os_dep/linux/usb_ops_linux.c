@@ -223,7 +223,7 @@ int _usbctrl_vendorreq_async_write(struct usb_device *udev, u8 request,
 		reqtype =  REALTEK_USB_VENQT_WRITE;
 	}
 
-	buf = (struct rtl819x_async_write_data *)rtw_zmalloc(sizeof(*buf));
+	buf = (struct rtw_async_write_data *)rtw_zmalloc(sizeof(*buf));
 	if (!buf) {
 		rc = -ENOMEM;
 		goto exit;
