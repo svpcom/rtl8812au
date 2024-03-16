@@ -25,6 +25,9 @@ EXTRA_CFLAGS += -Wno-cast-function-type
 EXTRA_CFLAGS += -Wno-date-time
 EXTRA_CFLAGS += -Wno-misleading-indentation
 EXTRA_CFLAGS += -Wno-uninitialized
+
+####EXTRA_CFLAGS += -DCONFIG_CONCURRENT_MODE
+EXTRA_CFLAGS += -DCONFIG_USB_TX_AGGREGATION
 CFLAGS += -Wno-declaration-after-statement
 # Relax some warnings from '-Wextra' so we won't get flooded with warnings
 EXTRA_CFLAGS += -Wno-sign-compare
@@ -716,6 +719,9 @@ endif
 ifeq ($(CONFIG_PLATFORM_ARM_RPI), y)
 EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
 EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
+#EXTRA_CFLAGS += -DCONFIG_XMIT_THREAD_MODE # Currently appears not to work, but could be helpful
+EXTRA_CFLAGS += -DCONFIG_USE_USB_BUFFER_ALLOC_TX
+EXTRA_CFLAGS += -DCONFIG_REDUCE_USB_TX_INT
 ARCH ?= arm
 CROSS_COMPILE ?=
 KVER ?= $(shell uname -r)
