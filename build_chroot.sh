@@ -47,7 +47,6 @@ git describe --exact-match HEAD >/dev/null 2>&1
 echo "Pushing the package to OpenHD 2.5 repository"
 ls -a
 cloudsmith push deb --api-key "$API_KEY" openhd/release/debian/bullseye rtl8812au-x20.deb || exit 1
-fi
 else
 
 sudo apt update 
