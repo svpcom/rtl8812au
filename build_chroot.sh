@@ -26,6 +26,7 @@ if [[ -e /etc/os-release && $(grep -c "Raspbian" /etc/os-release) -gt 0 ]]; then
     echo "_____________________________________________"
     ls -a /usr/src/
 elif [[ -e /etc/os-release && $(grep -c "Armbian" /etc/os-release) -gt 0 ]]; then
+    sudo pip3 install --upgrade cloudsmith-cli
     echo "building for the x20"
     sudo apt update 
     sudo apt install -y build-essential flex bc bison dkms git
