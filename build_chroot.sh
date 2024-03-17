@@ -28,6 +28,7 @@ if [[ -e /etc/os-release && $(grep -c "Raspbian" /etc/os-release) -gt 0 ]]; then
 elif [[ -e /etc/os-release && $(grep -c "Armbian" /etc/os-release) -gt 0 ]]; then
     echo "building for the x20"
     sudo apt update 
+    sudo apt list |grep linux-headers
     sudo apt install -y build-essential flex bc bison dkms linux-headers-5.8.0-29-generic
     echo "---------------"
     echo "_____________________________________________"

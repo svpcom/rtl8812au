@@ -1,4 +1,4 @@
-name: build on x86 lunar
+name: build on x20
 
 on: [push]
 
