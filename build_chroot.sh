@@ -29,6 +29,9 @@ elif [[ -e /etc/os-release && $(grep -c "Armbian" /etc/os-release) -gt 0 ]]; the
     echo "building for the x20"
     sudo apt update 
     sudo apt install -y build-essential flex bc bison dkms git
+    wget https://sby.mirror.bignet.id/ubuntu-ports/pool/main/l/linux-hwe-5.8/linux-hwe-5.8-headers-5.8.0-29_5.8.0-29.31~20.04.1_all.deb
+    dpkg -i *.deb
+    rm -Rf *.deb
     wget https://sby.mirror.bignet.id/ubuntu-ports/pool/main/l/linux-hwe-5.8/linux-headers-5.8.0-29-generic_5.8.0-29.31~20.04.1_armhf.deb
     dpkg -i *.deb
     echo "---------------"
