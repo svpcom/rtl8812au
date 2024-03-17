@@ -36,8 +36,11 @@ elif [[ -e /etc/os-release && $(grep -c "Armbian" /etc/os-release) -gt 0 ]]; the
     dpkg -i *.deb
     echo "---------------"
     echo "_____________________________________________"
-    make
-    make install
+    make KSRC=/usr/src/linux-headers-5.8.0-29-generic O="" modules
+    mkdir -p package/lib/modules/5.8.0/kernel/drivers/net/wireless/
+    cp *.ko package/lib/modules/5.8.0/kernel/drivers/net/wireless/
+    ls -a
+    fpm -a armhf -s dir -t deb -n rtl8812au-x20 -v 2.5-evo-$(date '+%m%d%H%M') -C package -p rtl8812au-x20.deb --before-install before-install.sh --after-install after-install.sh
 else
 
 sudo apt update 
