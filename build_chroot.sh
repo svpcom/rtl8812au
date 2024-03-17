@@ -41,6 +41,12 @@ elif [[ -e /etc/os-release && $(grep -c "Armbian" /etc/os-release) -gt 0 ]]; the
     cp *.ko package/lib/modules/5.8.0/kernel/drivers/net/wireless/
     ls -a
     fpm -a armhf -s dir -t deb -n rtl8812au-x20 -v 2.5-evo-$(date '+%m%d%H%M') -C package -p rtl8812au-x20.deb --before-install before-install.sh --after-install after-install.sh
+echo "push to cloudsmith"
+git describe --exact-match HEAD >/dev/null 2>&1
+echo "Pushing the package to OpenHD 2.5 repository"
+ls -a
+cloudsmith push deb --api-key "$API_KEY" openhd/release/debian/bullseye rtl8812au-x20.deb || exit 1
+fi
 else
 
 sudo apt update 
