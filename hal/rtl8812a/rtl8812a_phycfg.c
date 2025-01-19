@@ -1870,7 +1870,8 @@ phy_SwChnlAndSetBwMode8812(
 	}
 
 	odm_clear_txpowertracking_state(&pHalData->odmpriv);
-	PHY_SetTxPowerLevel8812(Adapter, pHalData->current_channel);
+	// No knowledge about this line, so it temporary removed for time saving on channel switch
+	// PHY_SetTxPowerLevel8812(Adapter, pHalData->current_channel);
 
 	if (IS_HARDWARE_TYPE_8812(Adapter))
 		phy_InitRssiTRSW(Adapter);
