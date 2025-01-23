@@ -129,8 +129,8 @@ phy_RFSerialRead(
 
 	/* <20120809, Kordan> CCA ON(when exiting), asked by James to avoid reading the wrong value. */
 	/* <20120828, Kordan> Toggling CCA would affect RF 0x0, skip it! */
-	if (Offset != 0x0 &&  !(IS_VENDOR_8812A_C_CUT(Adapter) || IS_HARDWARE_TYPE_8821(Adapter)))
-		phy_set_bb_reg(Adapter, rCCAonSec_Jaguar, 0x8, 0);
+	/*BB CCA off*/
+	phy_set_bb_reg(Adapter, rCCAonSec_Jaguar, 0x8, 1);
 
 	_exit_critical_mutex(&(adapter_to_dvobj(Adapter)->rf_read_reg_mutex), NULL);
 	return retValue;
@@ -168,7 +168,8 @@ phy_RFSerialWrite(
 	/* TODO: Dynamically determine whether using PI or SI to write RF registers. */
 	phy_set_bb_reg(Adapter, pPhyReg->rf3wireOffset, bMaskDWord, DataAndAddr);
 	/* RTW_INFO("RFW-%d Addr[0x%x]=0x%x\n", eRFPath, pPhyReg->rf3wireOffset, DataAndAddr); */
-
+	/*BB CCA off*/
+	phy_set_bb_reg(Adapter, rCCAonSec_Jaguar, 0x8, 1);
 }
 
 u32
@@ -300,6 +301,8 @@ PHY_BB8812_Config_1T(
 	/* ADDA Path_B OFF */
 	phy_set_bb_reg(Adapter, 0xe60, bMaskDWord, 0);
 	phy_set_bb_reg(Adapter, 0xe64, bMaskDWord, 0);
+	/*BB CCA off*/
+	phy_set_bb_reg(Adapter, rCCAonSec_Jaguar, 0x8, 1);
 }
 
 
