@@ -16,9 +16,16 @@
 
 #include <linux/kernel.h>
 #include <linux/export.h>
+#include <linux/version.h>
 #include <net/cfg80211.h>
 #include <net/ieee80211_radiotap.h>
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 12, 0)
 #include <asm/unaligned.h>
+#else
+#include <linux/unaligned.h>
+#endif
+
 
 /* function prototypes and related defs are in include/net/cfg80211.h */
 
