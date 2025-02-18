@@ -7,6 +7,9 @@ else
   echo "About to run dkms install steps..."
 fi
 
+#Add devendencies
+sudo apt install sbsigntool dkms linux-headers-`uname -r` -y
+
 DRV_DIR=rtl8812au
 DRV_NAME=rtl8812au
 DRV_VERSION=5.2.20.2
@@ -17,6 +20,15 @@ dkms add -m ${DRV_NAME} -v ${DRV_VERSION}
 dkms build -m ${DRV_NAME} -v ${DRV_VERSION}
 dkms install -m ${DRV_NAME} -v ${DRV_VERSION}
 RESULT=$?
+
+#Sign driver
+INST_DRV_DIR=/lib/modules/`uname -r`/updates/dkms
+MOD_NAME=88XXau_wfb.ko
+unzstd ${INST_DRV_DIR}/${MOD_NAME}.zst
+kmodsign sha512 mok/MOK.priv mok/MOK.der ${INST_DRV_DIR}/${MOD_NAME}
+rm ${INST_DRV_DIR}/${MOD_NAME}.zst
+zstd ${INST_DRV_DIR}/${MOD_NAME}
+rm ${INST_DRV_DIR}/${MOD_NAME}
 
 echo "Finished running dkms install steps."
 
