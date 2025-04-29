@@ -3725,6 +3725,9 @@ static int cfg80211_rtw_get_txpower(struct wiphy *wiphy,
 #if (CFG80211_API_LEVEL >= KERNEL_VERSION(3, 8, 0))
 	struct wireless_dev *wdev,
 #endif
+#if (CFG80211_API_LEVEL >= KERNEL_VERSION(6, 14, 0))
+  unsigned int link_id,
+#endif
 	int *dbm)
 {
 	u8 override;
