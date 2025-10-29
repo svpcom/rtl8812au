@@ -1536,6 +1536,12 @@ ifneq ($(USER_MODULE_NAME),)
 MODULE_NAME := $(USER_MODULE_NAME)_wfb
 endif
 
+EXTRA_CFLAGS += -Wno-missing-prototypes -Wno-header-guard -Wno-missing-declarations
+asflags-y += $(EXTRA_AFLAGS)
+ccflags-y += $(EXTRA_CFLAGS)
+cppflags-y += $(EXTRA_CPPFLAGS)
+ldflags-y += $(EXTRA_LDFLAGS)
+
 ifneq ($(KERNELRELEASE),)
 
 rtk_core :=	core/rtw_cmd.o \
