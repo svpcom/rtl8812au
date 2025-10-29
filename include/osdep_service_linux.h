@@ -304,13 +304,19 @@ __inline static void rtw_list_delete(_list *plist)
 	list_del_init(plist);
 }
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 16, 0))
+static void legacy_timer_emu_func(struct timer_list *t)
+{
+  struct legacy_timer_emu *lt = timer_container_of(lt, t, t);
+  lt->function(lt->data);
+}
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0))
 static void legacy_timer_emu_func(struct timer_list *t)
 {
   struct legacy_timer_emu *lt = from_timer(lt, t, t);
   lt->function(lt->data);
 }
-#endif //(LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0))
+#endif
 
 __inline static void _init_timer(_timer *ptimer, _nic_hdl nic_hdl, void *pfunc, void *cntx)
 {
@@ -335,11 +341,13 @@ __inline static void _set_timer(_timer *ptimer, u32 delay_time)
 
 __inline static void _cancel_timer(_timer *ptimer, u8 *bcancelled)
 {
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0))
+  *bcancelled = timer_delete_sync(&ptimer->t) == 1 ? 1 : 0;
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0))
 	*bcancelled = del_timer_sync(&ptimer->t) == 1 ? 1 : 0;
 #else
 	*bcancelled = del_timer_sync(ptimer) == 1 ? 1 : 0;
-#endif //(LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0))
+#endif
 }
 
 static inline void _init_workitem(_workitem *pwork, void *pfunc, void *cntx)

@@ -369,13 +369,15 @@ __inline static unsigned char _cancel_timer_ex(_timer *ptimer)
 {
 	u8 bcancelled;
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0))
+	return timer_delete_sync(&ptimer->t);
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0))
 	return del_timer_sync(&ptimer->t);
 #else
 	_cancel_timer(ptimer, &bcancelled);
 
 	return bcancelled;
-#endif //(LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0))
+#endif
 }
 
 static __inline void thread_enter(char *name)
