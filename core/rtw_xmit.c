@@ -22,6 +22,12 @@
 	#error "Shall be Linux or Windows, but not both!\n"
 #endif
 
+#include <linux/module.h>
+#include <linux/moduleparam.h>
+
+static int MaxTxBufLen = 0; /* default disabled */
+module_param(MaxTxBufLen, int, 0444);
+MODULE_PARM_DESC(MaxTxBufLen, "Max TX buffer size taken before returning NETDEV_TX_BUSY");
 
 static u8 P802_1H_OUI[P80211_OUI_LEN] = { 0x00, 0x00, 0xf8 };
 static u8 RFC1042_OUI[P80211_OUI_LEN] = { 0x00, 0x00, 0x00 };
@@ -77,6 +83,8 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 	struct xmit_frame *pxframe;
 	sint	res = _SUCCESS;
 
+	if (MaxTxBufLen>0)
+		pr_info("8812au: Use max %d of %d Tx buffer slots before returning NETDEV_TX_BUSY ", MaxTxBufLen , NR_XMIT_EXTBUFF);
 
 	/* We don't need to memset padapter->XXX to zero, because adapter is allocated by rtw_zvmalloc(). */
 	/* _rtw_memset((unsigned char *)pxmitpriv, 0, sizeof(struct xmit_priv)); */
@@ -4283,6 +4291,11 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 	rtap_len = ieee80211_get_radiotap_len(skb->data);
 	if (unlikely(skb->len < rtap_len))
 		goto fail;
+
+	if (MaxTxBufLen>0 && 
+		 ((pxmitpriv->free_xframe_ext_cnt <= NR_XMIT_EXTBUFF - MaxTxBufLen) ||  // check tx queue if is about to get full
+            (pxmitpriv->free_xmit_extbuf_cnt <= NR_XMIT_EXTBUFF - MaxTxBufLen)))  // check if we can allocate more buffers before even trying to do anything       
+               return NETDEV_TX_BUSY; 	
 
 	pmgntframe = monitor_alloc_mgtxmitframe(pxmitpriv);
 	if (unlikely(pmgntframe == NULL)) {
