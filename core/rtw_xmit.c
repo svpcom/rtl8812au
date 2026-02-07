@@ -83,8 +83,16 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, _adapter *padapter)
 	struct xmit_frame *pxframe;
 	sint	res = _SUCCESS;
 
-	if (MaxTxBufLen>0)
+	if (MaxTxBufLen > NR_XMIT_EXTBUFF)
+        {
+		MaxTxBufLen = NR_XMIT_EXTBUFF;
+		pr_err("8812au: limit MaxTxBufLen to %d (range: 0 to NR_XMIT_EXTBUFF (%d))", MaxTxBufLen, NR_XMIT_EXTBUFF);
+	}
+
+	if (MaxTxBufLen > 0)
+        {
 		pr_info("8812au: Use max %d of %d Tx buffer slots before returning NETDEV_TX_BUSY ", MaxTxBufLen , NR_XMIT_EXTBUFF);
+        }
 
 	/* We don't need to memset padapter->XXX to zero, because adapter is allocated by rtw_zvmalloc(). */
 	/* _rtw_memset((unsigned char *)pxmitpriv, 0, sizeof(struct xmit_priv)); */
@@ -4292,9 +4300,9 @@ s32 rtw_monitor_xmit_entry(struct sk_buff *skb, struct net_device *ndev)
 	if (unlikely(skb->len < rtap_len))
 		goto fail;
 
-	if (MaxTxBufLen>0 && 
-		 ((pxmitpriv->free_xframe_ext_cnt <= NR_XMIT_EXTBUFF - MaxTxBufLen) ||  // check tx queue if is about to get full
-            (pxmitpriv->free_xmit_extbuf_cnt <= NR_XMIT_EXTBUFF - MaxTxBufLen)))  // check if we can allocate more buffers before even trying to do anything       
+	if (MaxTxBufLen > 0 &&
+		(pxmitpriv->free_xframe_ext_cnt  <= (NR_XMIT_EXTBUFF - MaxTxBufLen) || // check tx queue if is about to get full
+		 pxmitpriv->free_xmit_extbuf_cnt <= (NR_XMIT_EXTBUFF - MaxTxBufLen)))  // check if we can allocate more buffers before even trying to do anything
                return NETDEV_TX_BUSY; 	
 
 	pmgntframe = monitor_alloc_mgtxmitframe(pxmitpriv);
