@@ -22,6 +22,38 @@
 	#include <linux/if_pppox.h>
 #endif
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
+/*
+ * Kernel 7.1 removed pppoe_hdr::tag[] and pppoe_tag::tag_data[]
+ * from kernel-visible structs.  Define local copies with the
+ * flexible array members so the rest of this file compiles as-is.
+ */
+struct rtw_pppoe_tag {
+	__be16 tag_type;
+	__be16 tag_len;
+	char tag_data[];
+} __attribute__((packed));
+
+struct rtw_pppoe_hdr {
+#if defined(__LITTLE_ENDIAN_BITFIELD)
+	__u8 type : 4;
+	__u8 ver : 4;
+#elif defined(__BIG_ENDIAN_BITFIELD)
+	__u8 ver : 4;
+	__u8 type : 4;
+#else
+#error "Please fix <asm/byteorder.h>"
+#endif
+	__u8 code;
+	__be16 sid;
+	__be16 length;
+	struct rtw_pppoe_tag tag[];
+} __packed;
+
+#define pppoe_hdr rtw_pppoe_hdr
+#define pppoe_tag rtw_pppoe_tag
+#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0) */
+
 #if 1	/* rtw_wifi_driver */
 	#include <drv_types.h>
 #else	/* rtw_wifi_driver */
@@ -1579,3 +1611,8 @@ void *scdb_findEntry(_adapter *priv, unsigned char *macAddr,
 }
 
 #endif /* CONFIG_BR_EXT */
+
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
+#undef pppoe_hdr
+#undef pppoe_tag
+#endif
