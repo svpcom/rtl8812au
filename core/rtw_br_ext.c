@@ -16,6 +16,7 @@
 
 #ifdef __KERNEL__
 	#include <linux/if_arp.h>
+	#include <linux/version.h>
 	#include <net/ip.h>
 	#include <linux/atalk.h>
 	#include <linux/udp.h>
