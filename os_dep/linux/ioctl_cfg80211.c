@@ -6478,9 +6478,6 @@ static int cfg80211_rtw_tdls_mgmt(struct wiphy *wiphy,
 #else
 	u8 *peer,
 #endif
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 5, 0))
-	int link_id,
-#endif
 	u8 action_code,
 	u8 dialog_token,
 	u16 status_code,
@@ -6569,6 +6566,24 @@ bad:
 discard:
 	return ret;
 }
+
+#if (CFG80211_API_LEVEL >= KERNEL_VERSION(3, 17, 0))
+static int cfg80211_rtw_tdls_mgmt_link(struct wiphy *wiphy,
+	struct net_device *ndev,
+	const u8 *peer,
+	int link_id,
+	u8 action_code,
+	u8 dialog_token,
+	u16 status_code,
+	u32 peer_capability,
+	bool initiator,
+	const u8 *buf,
+	size_t len)
+{
+	return cfg80211_rtw_tdls_mgmt(wiphy, ndev, peer, action_code, dialog_token,
+		status_code, peer_capability, initiator, buf, len);
+}
+#endif
 
 static int cfg80211_rtw_tdls_oper(struct wiphy *wiphy,
 	struct net_device *ndev,
@@ -7818,6 +7833,10 @@ int rtw_hostapd_acs_dump_survey(struct wiphy *wiphy, struct net_device *netdev, 
 }
 #endif /* defined(CONFIG_RTW_HOSTAPD_ACS) && (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 33)) */
 
+/* Stable trees backport cfg80211_ops prototype changes, so no version check fits: select by type */
+#define RTW_CFG80211_OP_MATCH(op, new_fn, old_fn) \
+	__builtin_choose_expr(__same_type(((struct cfg80211_ops *)0)->op, &new_fn), new_fn, old_fn)
+
 static struct cfg80211_ops rtw_cfg80211_ops = {
 	.change_virtual_intf = cfg80211_rtw_change_iface,
 	.add_key = cfg80211_rtw_add_key,
@@ -7874,11 +7893,8 @@ static struct cfg80211_ops rtw_cfg80211_ops = {
 #endif /* CONFIG_AP_MODE */
 
 #if (CFG80211_API_LEVEL >= KERNEL_VERSION(3, 8, 0))
-	/* The net_device argument came in 6.13 and was backported to 6.12.101, so no version check fits */
-	.set_monitor_channel = __builtin_choose_expr(
-		__same_type(((struct cfg80211_ops *)0)->set_monitor_channel, &cfg80211_rtw_set_monitor_channel_ndev),
-		cfg80211_rtw_set_monitor_channel_ndev,
-		cfg80211_rtw_set_monitor_channel),
+	.set_monitor_channel = RTW_CFG80211_OP_MATCH(set_monitor_channel,
+		cfg80211_rtw_set_monitor_channel_ndev, cfg80211_rtw_set_monitor_channel),
 #elif (CFG80211_API_LEVEL >= KERNEL_VERSION(3, 6, 0))
 	.set_monitor_channel = cfg80211_rtw_set_monitor_channel,
 #endif
@@ -7908,7 +7924,11 @@ static struct cfg80211_ops rtw_cfg80211_ops = {
 #endif
 
 #if defined(CONFIG_TDLS) && (CFG80211_API_LEVEL >= KERNEL_VERSION(3, 2, 0))
+#if (CFG80211_API_LEVEL >= KERNEL_VERSION(3, 17, 0))
+	.tdls_mgmt = RTW_CFG80211_OP_MATCH(tdls_mgmt, cfg80211_rtw_tdls_mgmt_link, cfg80211_rtw_tdls_mgmt),
+#else
 	.tdls_mgmt = cfg80211_rtw_tdls_mgmt,
+#endif
 	.tdls_oper = cfg80211_rtw_tdls_oper,
 #endif /* CONFIG_TDLS */
 
