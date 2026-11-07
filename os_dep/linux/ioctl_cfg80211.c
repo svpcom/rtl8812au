@@ -5076,10 +5076,7 @@ static int	cfg80211_rtw_set_channel(struct wiphy *wiphy
 }
 
 static int cfg80211_rtw_set_monitor_channel(struct wiphy *wiphy
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0))
-	, struct net_device *dev
-	, struct cfg80211_chan_def *chandef
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
+#if (CFG80211_API_LEVEL >= KERNEL_VERSION(3, 8, 0))
 	, struct cfg80211_chan_def *chandef
 #else
 	, struct ieee80211_channel *chan
@@ -5176,6 +5173,15 @@ static int cfg80211_rtw_set_monitor_channel(struct wiphy *wiphy
 
 	return 0;
 }
+
+#if (CFG80211_API_LEVEL >= KERNEL_VERSION(3, 8, 0))
+static int cfg80211_rtw_set_monitor_channel_ndev(struct wiphy *wiphy
+	, struct net_device *dev
+	, struct cfg80211_chan_def *chandef)
+{
+	return cfg80211_rtw_set_monitor_channel(wiphy, chandef);
+}
+#endif
 
 static int	cfg80211_rtw_auth(struct wiphy *wiphy, struct net_device *ndev,
 		struct cfg80211_auth_request *req)
@@ -7867,7 +7873,13 @@ static struct cfg80211_ops rtw_cfg80211_ops = {
 	/* .assoc = cfg80211_rtw_assoc,	 */
 #endif /* CONFIG_AP_MODE */
 
-#if (CFG80211_API_LEVEL >= KERNEL_VERSION(3, 6, 0))
+#if (CFG80211_API_LEVEL >= KERNEL_VERSION(3, 8, 0))
+	/* The net_device argument came in 6.13 and was backported to 6.12.101, so no version check fits */
+	.set_monitor_channel = __builtin_choose_expr(
+		__same_type(((struct cfg80211_ops *)0)->set_monitor_channel, &cfg80211_rtw_set_monitor_channel_ndev),
+		cfg80211_rtw_set_monitor_channel_ndev,
+		cfg80211_rtw_set_monitor_channel),
+#elif (CFG80211_API_LEVEL >= KERNEL_VERSION(3, 6, 0))
 	.set_monitor_channel = cfg80211_rtw_set_monitor_channel,
 #endif
 
