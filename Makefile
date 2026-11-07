@@ -1543,6 +1543,11 @@ ldflags-y += $(EXTRA_LDFLAGS)
 
 ifneq ($(KERNELRELEASE),)
 
+# drvwrap was removed in 6.8 and in 6.1.188 and 6.6.157, so no version check fits
+ifneq ($(shell grep -sF 'struct usbdrv_wrap drvwrap;' $(srctree)/include/linux/usb.h),)
+ccflags-y += -DRTW_USB_DRVWRAP
+endif
+
 rtk_core :=	core/rtw_cmd.o \
 		core/rtw_security.o \
 		core/rtw_debug.o \
